@@ -10,11 +10,11 @@ namespace VareDatabase.DBContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder ob)
         {
-            ob.UseSqlServer(@"Data Source = (localdb)\MSSQLLocalDB;Database=testdb;Trusted_Connection=True;MultipleActiveResultSets=true");
+            ob.UseSqlServer(@"Data Source=localhost,1433;Database=vareDatabase;User ID=SA;Password=SecPass1;");
         }
        
         public DbSet<ItemEntity> Item { get; set; }
-        public DbSet<BidEntity> BId { get; set; }
+        public DbSet<BidEntity> Bid { get; set; }
         public DbSet<DescriptionEntity> Description { get; set; }
         public DbSet<TimeEntity> Time { get; set; }
 
@@ -23,17 +23,17 @@ namespace VareDatabase.DBContext
             modelBuilder.Entity<ItemEntity>()
                 .HasOne(a => a.Time)
                 .WithOne(b => b.Item)
-                .HasForeignKey<TimeEntity>(e => e.Item);
+                .HasForeignKey<TimeEntity>(e => e.ItemId);
 
             modelBuilder.Entity<ItemEntity>()
                 .HasOne(a => a.Bid)
                 .WithOne(b => b.Item)
-                .HasForeignKey<BidEntity>(e => e.Item);
+                .HasForeignKey<BidEntity>(e => e.ItemId);
 
             modelBuilder.Entity<ItemEntity>()
                 .HasOne(a => a.Description)
                 .WithOne(b => b.Item)
-                .HasForeignKey<DescriptionEntity>(e => e.Item);
+                .HasForeignKey<DescriptionEntity>(e => e.ItemId);
         }
 
     }
