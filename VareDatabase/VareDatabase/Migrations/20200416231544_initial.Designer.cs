@@ -10,8 +10,8 @@ using VareDatabase.DBContext;
 namespace VareDatabase.Migrations
 {
     [DbContext(typeof(VareDataModelContext))]
-    [Migration("20200416223250_Update")]
-    partial class Update
+    [Migration("20200416231544_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
