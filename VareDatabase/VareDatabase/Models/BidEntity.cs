@@ -11,7 +11,7 @@ namespace VareDatabase.Models
         public int Id { get; set; }
         public int userID_forLastBid { get; set; }
         public int price { get; set; }
-        public int ÚuerID_forSeller { get; set; }
+        public int ÚserID_forSeller { get; set; }
 
         //Navigational property
         public ItemEntity Item { get; set; }
