@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace VareDatabase.Models
 {
 
     public class BidEntity
     {
+        [Key]
         public int Id { get; set; }
-        public int userID_forLastBid { get; set; }
-        public int price { get; set; }
-        public int userID_forSeller { get; set; }
+        [Required]
+        public int Bid { get; set; }
+        [Required]
+        public int UserIdBuyer { get; set; }
 
         //Navigational property
         public ItemEntity Item { get; set; }

@@ -28,9 +28,6 @@ namespace VareDatabase
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
-            services.AddDbContext<DbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DbContext")));
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

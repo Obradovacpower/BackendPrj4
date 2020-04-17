@@ -10,9 +10,7 @@ namespace VareDatabase.Models
     {
         public static void Initialize(IServiceProvider serviceProvider)
         {
-            using (var context = new VareDataModelContext(
-                serviceProvider.GetRequiredService<
-                DbContextOptions<VareDataModelContext>>()))
+            using (var context = new VareDataModelContext())
             {
                 context.Database.EnsureCreated();
                 //Dummiedata.
@@ -20,14 +18,8 @@ namespace VareDatabase.Models
                 {
                     return;   // DB has been seeded
                 }
-
-                context.Item.Add(
-                    new ItemEntity
-                    {
-                        ItemId =  5,
-                        Type = "jonas' gamle legendary skjold fra Arch Age"
-                    }
-                );
+                DummyData dd = new DummyData();
+                dd.InsertDummyData();
                 context.SaveChanges();
             }
         }
