@@ -16,12 +16,18 @@ namespace VareDatabase
             //Bows
             ItemEntity DeluxeBow = new ItemEntity();
             DeluxeBow.Type = "Bow";
-            DeluxeBow.Description.descriptionOfItem = "Powerful bow that is best at the range of 30-50 meters";
-            DeluxeBow.Description.imageOfItem = "empty";
-            DeluxeBow.Description.title = "Deluxebow - 30-50 meters";
-            DeluxeBow.Bid.UserId_forSeller = 2222;
-            DeluxeBow.Bid.UserId_forLastBid = 1111;
-            DeluxeBow.Bid.price = 300;
+            DeluxeBow.Description = new DescriptionEntity()
+            {
+                descriptionOfItem = "Powerful bow that is best at the range of 30-50 meters",
+                imageOfItem = "empty",
+                title = "Deluxebow - 30-50 meters"
+            };
+            DeluxeBow.Bid = new BidEntity()
+            {
+                price = 300,
+                UserId_forLastBid = 1100,
+                UserId_forSeller = 2200,
+            };
             db.Add(DeluxeBow);
 
             ItemEntity BeginnerBow = new ItemEntity();

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,28 +12,23 @@ namespace VareDatabase.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ItemController : ControllerBase
+    public class ItemEntitiesController : ControllerBase
     {
         private readonly VareDataModelContext _context;
 
-        public ItemController(VareDataModelContext context)
+        public ItemEntitiesController(VareDataModelContext context)
         {
             _context = context;
         }
 
-        public string Index(string name, int numTimes = 1)
-        {
-            return "Hey hva sker der makker";
-        }
-
-        // GET: api/Item
+        // GET: api/ItemEntities
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ItemEntity>>> GetItem()
         {
             return await _context.Item.ToListAsync();
         }
 
-        // GET: api/Item/5
+        // GET: api/ItemEntities/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ItemEntity>> GetItemEntity(int id)
         {
@@ -48,7 +42,7 @@ namespace VareDatabase.Controllers
             return itemEntity;
         }
 
-        // PUT: api/Item/5
+        // PUT: api/ItemEntities/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
@@ -80,7 +74,7 @@ namespace VareDatabase.Controllers
             return NoContent();
         }
 
-        // POST: api/Item
+        // POST: api/ItemEntities
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
@@ -92,7 +86,7 @@ namespace VareDatabase.Controllers
             return CreatedAtAction("GetItemEntity", new { id = itemEntity.ItemId }, itemEntity);
         }
 
-        // DELETE: api/Item/5
+        // DELETE: api/ItemEntities/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<ItemEntity>> DeleteItemEntity(int id)
         {
