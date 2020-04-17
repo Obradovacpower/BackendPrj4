@@ -8,12 +8,13 @@ namespace VareDatabase.DBContext
 {
     public class VareDataModelContext : DbContext
     {
+        public VareDataModelContext(DbContextOptions<VareDataModelContext> options) : base(options) { }
         protected override void OnConfiguring(DbContextOptionsBuilder ob)
         {
-            ob.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;TrustServerCertificate=False;MultiSubnetFailover=False");
+            ob.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;TrustServerCertificate=False;MultiSubnetFailover=False;database=testDB;");
         }
         //Seb: @"Data Source=localhost,1433;Database=vareDatabase;User ID=SA;Password=SecPass1;"
-        //Ermin: @"Data Source=(localdb)\MSSQLLocalDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
+        //Erm: @"Data Source=(localdb)\MSSQLLocalDB;TrustServerCertificate=False;MultiSubnetFailover=False;database=testDB;"
 
         public DbSet<ItemEntity> Item { get; set; }
         public DbSet<BidEntity> Bid { get; set; }

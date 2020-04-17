@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,11 @@ namespace VareDatabase.Controllers
         public ItemController(VareDataModelContext context)
         {
             _context = context;
+        }
+
+        public string Index(string name, int numTimes = 1)
+        {
+            return "Hey hva sker der makker";
         }
 
         // GET: api/Item
