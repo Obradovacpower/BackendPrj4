@@ -14,19 +14,32 @@ namespace VareDatabase
             using var db = new VareDataModelContext();
 
             //Bows
-            ItemEntity DeluxeBow = new ItemEntity();
-            DeluxeBow.Type = "Bow";
-            DeluxeBow.Description = new DescriptionEntity()
+            ItemEntity DeluxeBow = new ItemEntity()
             {
-                descriptionOfItem = "Powerful bow that is best at the range of 30-50 meters",
-                imageOfItem = "empty",
-                title = "Deluxebow - 30-50 meters"
-            };
-            DeluxeBow.Bid = new BidEntity()
-            {
-                price = 300,
-                UserId_forLastBid = 1100,
-                UserId_forSeller = 2200,
+                BuyOutPrice = 3000,
+                DateCreated = DateTime.Now,
+                ExpirationDate = new DateTime(2020, 12, 24),
+                Type = "Bow",
+                Title = "Elven Bow BUY NOW",
+                UserIdSeller = 12,
+                Description = new DescriptionEntity()
+                {
+                    DescriptionOfItem = "Powerful bow that is best at the range of 30-50 meters",
+                    ImageOfItem = "empty"
+                },
+                Bids = new List<BidEntity>
+                {
+                    new BidEntity
+                    {
+                        Bid = 200,
+                        UserIdBuyer = 30
+                    },
+                    new BidEntity
+                    {
+                        Bid = 300,
+                        UserIdBuyer = 29
+                    }
+                }
             };
             db.Add(DeluxeBow);
 
