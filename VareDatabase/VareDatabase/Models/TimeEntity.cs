@@ -9,7 +9,7 @@ namespace VareDatabase.Models
     public class TimeEntity
     {
         public int Id { get; set; }
-        public string experation { get; set; }
+        public DateTime expiration { get; set; }
         public DateTime timeOfCreation { get; set; }
 
         //Navigational property

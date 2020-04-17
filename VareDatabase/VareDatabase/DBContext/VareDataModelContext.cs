@@ -8,7 +8,10 @@ namespace VareDatabase.DBContext
 {
     public class VareDataModelContext : DbContext
     {
-        public VareDataModelContext(DbContextOptions<VareDataModelContext> options) : base(options) { }
+        public VareDataModelContext()
+        {
+
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder ob)
         {
             ob.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;TrustServerCertificate=False;MultiSubnetFailover=False;database=testDB;");
