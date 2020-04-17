@@ -14,13 +14,14 @@ namespace VareDatabase.Models
                 serviceProvider.GetRequiredService<
                 DbContextOptions<VareDataModelContext>>()))
             {
+                context.Database.EnsureCreated();
                 //Dummiedata.
                 if (context.Item.Any())
                 {
                     return;   // DB has been seeded
                 }
 
-                context.Item.AddRange(
+                context.Item.Add(
                     new ItemEntity
                     {
                         ItemId =  5,
