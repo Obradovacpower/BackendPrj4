@@ -14,10 +14,11 @@ namespace VareDatabase.DBContext
         }
         protected override void OnConfiguring(DbContextOptionsBuilder ob)
         {
-            ob.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;TrustServerCertificate=False;MultiSubnetFailover=False;database=testDB;");
+            ob.UseSqlServer(@"Data Source=localhost,1433;Database=vareDatabase;User ID=SA;Password=Password1!;");
         }
         //Seb: @"Data Source=localhost,1433;Database=vareDatabase;User ID=SA;Password=SecPass1;"
         //Erm: @"Data Source=(localdb)\MSSQLLocalDB;TrustServerCertificate=False;MultiSubnetFailover=False;database=testDB;"
+        //Gus: @"Data Source=localhost,1433;Database=vareDatabase;User ID=SA;Password=Password1!;"
 
         public DbSet<ItemEntity> Item { get; set; }
         public DbSet<BidEntity> Bid { get; set; }
