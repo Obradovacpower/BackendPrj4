@@ -19,7 +19,7 @@ namespace VareDatabase.Models
                     return;   // DB has been seeded
                 }
                 DummyData dd = new DummyData();
-                dd.InsertDummyData();
+                dd.InsertDummyData(context);
                 context.SaveChanges();
             }
         }

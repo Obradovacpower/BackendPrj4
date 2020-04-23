@@ -9,10 +9,8 @@ namespace VareDatabase
 {
     public class DummyData
     {
-        public void InsertDummyData()
+        public void InsertDummyData(VareDataModelContext db)
         {
-            using var db = new VareDataModelContext();
-
             //Bows
             ItemEntity DeluxeBow = new ItemEntity()
             {
@@ -42,7 +40,7 @@ namespace VareDatabase
                 }
             };
             db.Add(DeluxeBow);
-
+            /*
             ItemEntity BeginnerBow = new ItemEntity();
             BeginnerBow.Type = "Bow";
             BeginnerBow.Description.descriptionOfItem = "Bow for the beginners who are learning to shoot arrows";
@@ -133,7 +131,7 @@ namespace VareDatabase
             Dagger.Bid.UserId_forLastBid = 3333;
             Dagger.Bid.price = 200;
             db.Add(Dagger);
-
+            */
             //Sværd
 
 

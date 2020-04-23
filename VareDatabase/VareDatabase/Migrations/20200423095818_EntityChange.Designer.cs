@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VareDatabase.DBContext;
 
 namespace VareDatabase.Migrations
 {
     [DbContext(typeof(VareDataModelContext))]
-    partial class VareDataModelContextModelSnapshot : ModelSnapshot
+    [Migration("20200423095818_EntityChange")]
+    partial class EntityChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

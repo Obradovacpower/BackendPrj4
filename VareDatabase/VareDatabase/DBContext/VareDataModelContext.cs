@@ -23,19 +23,13 @@ namespace VareDatabase.DBContext
         public DbSet<ItemEntity> Item { get; set; }
         public DbSet<BidEntity> Bid { get; set; }
         public DbSet<DescriptionEntity> Description { get; set; }
-        public DbSet<TimeEntity> Time { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ItemEntity>()
-                .HasOne(a => a.Time)
-                .WithOne(b => b.Item)
-                .HasForeignKey<TimeEntity>(e => e.ItemId);
-
-            modelBuilder.Entity<ItemEntity>()
-                .HasOne(a => a.Bid)
-                .WithOne(b => b.Item)
-                .HasForeignKey<BidEntity>(e => e.ItemId);
+            modelBuilder.Entity<BidEntity>()
+                .HasOne(a => a.Item)
+                .WithMany(b => b.Bids)
+                .HasForeignKey(b => b.Bid);
 
             modelBuilder.Entity<ItemEntity>()
                 .HasOne(a => a.Description)
