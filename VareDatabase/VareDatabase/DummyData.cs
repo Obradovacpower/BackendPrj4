@@ -673,7 +673,7 @@ namespace VareDatabase
             {
                 BuyOutPrice = 2000,
                 DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                ExpirationDate = new DateTime(2020, 9, 5),
                 Type = "Bracers",
                 Title = "Brown leather bracers",
                 UserIdSeller = 55,
@@ -711,7 +711,7 @@ namespace VareDatabase
             {
                 BuyOutPrice = 1500,
                 DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                ExpirationDate = new DateTime(2020, 11, 27),
                 Type = "Bracers",
                 Title = "Black leather bracers",
                 UserIdSeller = 55,
@@ -750,7 +750,7 @@ namespace VareDatabase
             {
                 BuyOutPrice = 1500,
                 DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                ExpirationDate = new DateTime(2020, 1, 20),
                 Type = "Bracers",
                 Title = "Metal bracers",
                 UserIdSeller = 55,
@@ -788,7 +788,7 @@ namespace VareDatabase
             {
                 BuyOutPrice = 1750,
                 DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                ExpirationDate = new DateTime(2020, 7, 12),
                 Type = "Boots",
                 Title = "Brown leather boots",
                 UserIdSeller = 62,
@@ -826,7 +826,7 @@ namespace VareDatabase
             {
                 BuyOutPrice = 1750,
                 DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                ExpirationDate = new DateTime(2020, 2, 7),
                 Type = "Boots",
                 Title = "Black leather boots",
                 UserIdSeller = 52,
@@ -864,7 +864,7 @@ namespace VareDatabase
             {
                 BuyOutPrice = 1750,
                 DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                ExpirationDate = new DateTime(2020, 7, 3),
                 Type = "Boots",
                 Title = "Metal boots",
                 UserIdSeller = 82,
@@ -903,7 +903,7 @@ namespace VareDatabase
             {
                 BuyOutPrice = 4000,
                 DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                ExpirationDate = new DateTime(2020, 8, 8),
                 Type = "Breastplate",
                 Title = "Breastplate - Brown leather",
                 UserIdSeller = 57,
@@ -942,7 +942,7 @@ namespace VareDatabase
             {
                 BuyOutPrice = 4000,
                 DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                ExpirationDate = new DateTime(2020, 6, 1),
                 Type = "Breastplate",
                 Title = "Breastplate - Black leather",
                 UserIdSeller = 57,
@@ -981,7 +981,7 @@ namespace VareDatabase
             {
                 BuyOutPrice = 4000,
                 DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                ExpirationDate = new DateTime(2020, 3, 26),
                 Type = "Breastplate",
                 Title = "Breastplate - Metal",
                 UserIdSeller = 57,
@@ -1018,8 +1018,8 @@ namespace VareDatabase
             ItemEntity HelmetRoman = new ItemEntity()
             {
                 BuyOutPrice = 4000,
-                DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                DateCreated = new DateTime(2020, 3, 14),
+                ExpirationDate = new DateTime(2020, 3, 21),
                 Type = "Helmet",
                 Title = "Roman ridge helmet",
                 UserIdSeller = 57,
@@ -1057,8 +1057,8 @@ namespace VareDatabase
             ItemEntity HelmetViking = new ItemEntity()
             {
                 BuyOutPrice = 4000,
-                DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                DateCreated = new DateTime(2020, 8, 1),
+                ExpirationDate = new DateTime(2020, 8, 21),
                 Type = "Helmet",
                 Title = "Viking helmet",
                 UserIdSeller = 57,
@@ -1096,8 +1096,8 @@ namespace VareDatabase
             ItemEntity HelmetKnight = new ItemEntity()
             {
                 BuyOutPrice = 4000,
-                DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                DateCreated = new DateTime(2020, 8, 30),
+                ExpirationDate = new DateTime(2020, 9, 30),
                 Type = "Helmet",
                 Title = "Knight helmet",
                 UserIdSeller = 69,
@@ -1135,8 +1135,8 @@ namespace VareDatabase
             ItemEntity GlovesBrownLeather = new ItemEntity()
             {
                 BuyOutPrice = 4000,
-                DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                DateCreated = new DateTime(2020, 3, 20),
+                ExpirationDate = new DateTime(2020, 5, 3),
                 Type = "Gloves",
                 Title = "Gloves - Brown leather",
                 UserIdSeller = 75,
@@ -1175,7 +1175,7 @@ namespace VareDatabase
             {
                 BuyOutPrice = 4000,
                 DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                ExpirationDate = new DateTime(2020, 10, 13),
                 Type = "Gloves",
                 Title = "Gloves - Black leather",
                 UserIdSeller = 16,
@@ -1213,7 +1213,7 @@ namespace VareDatabase
             {
                 BuyOutPrice = 2000,
                 DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                ExpirationDate = new DateTime(2020, 4, 18),
                 Type = "Gloves",
                 Title = "Gloves - Metal",
                 UserIdSeller = 16,
@@ -1254,8 +1254,8 @@ namespace VareDatabase
             ItemEntity ElixirFlaskLarge = new ItemEntity()
             {
                 BuyOutPrice = 2000,
-                DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                DateCreated = new DateTime(2020, 7, 19),
+                ExpirationDate = new DateTime(2020, 8, 10),
                 Type = "Accesories",
                 Title = "Large elixir flask",
                 UserIdSeller = 70,
@@ -1293,8 +1293,8 @@ namespace VareDatabase
             ItemEntity ElixirFlaskSmall = new ItemEntity()
             {
                 BuyOutPrice = 2000,
-                DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                DateCreated = new DateTime(2020, 3, 1),
+                ExpirationDate = new DateTime(2020, 3, 11),
                 Type = "Accesories",
                 Title = "Small elixir flask",
                 UserIdSeller = 70,
@@ -1332,8 +1332,8 @@ namespace VareDatabase
             ItemEntity FlaskBag = new ItemEntity()
             {
                 BuyOutPrice = 2000,
-                DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                DateCreated = new DateTime(2020, 3, 2),
+                ExpirationDate = new DateTime(2020, 3, 28),
                 Type = "Accesories",
                 Title = "Elixir flask bag",
                 UserIdSeller = 55,
@@ -1361,8 +1361,8 @@ namespace VareDatabase
             ItemEntity DrinkingHorn = new ItemEntity()
             {
                 BuyOutPrice = 3000,
-                DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                DateCreated = new DateTime(2020, 5, 18),
+                ExpirationDate = new DateTime(2020, 5, 25),
                 Type = "Accesories",
                 Title = "Elven Bow BUY NOW",
                 UserIdSeller = 1,
@@ -1390,8 +1390,8 @@ namespace VareDatabase
             ItemEntity ElfEars = new ItemEntity()
             {
                 BuyOutPrice = 600,
-                DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                DateCreated = new DateTime(2020, 9,20),
+                ExpirationDate = new DateTime(2020, 9, 29),
                 Type = "Accesories",
                 Title = "Elf Ears ",
                 UserIdSeller = 99,
