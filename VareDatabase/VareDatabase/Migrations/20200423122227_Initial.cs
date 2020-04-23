@@ -13,7 +13,12 @@ namespace VareDatabase.Migrations
                 {
                     ItemId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Type = table.Column<string>(nullable: true)
+                    Type = table.Column<string>(nullable: false),
+                    Title = table.Column<string>(maxLength: 120, nullable: false),
+                    BuyOutPrice = table.Column<int>(nullable: false),
+                    ExpirationDate = table.Column<DateTime>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    UserIdSeller = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -26,17 +31,16 @@ namespace VareDatabase.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId_forLastBid = table.Column<int>(nullable: false),
-                    price = table.Column<int>(nullable: false),
-                    UserId_forSeller = table.Column<int>(nullable: false),
+                    Bid = table.Column<int>(nullable: false),
+                    UserIdBuyer = table.Column<int>(nullable: false),
                     ItemId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Bid", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Bid_Item_ItemId",
-                        column: x => x.ItemId,
+                        name: "FK_Bid_Item_Bid",
+                        column: x => x.Bid,
                         principalTable: "Item",
                         principalColumn: "ItemId",
                         onDelete: ReferentialAction.Cascade);
@@ -48,9 +52,8 @@ namespace VareDatabase.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    imageOfItem = table.Column<string>(nullable: true),
-                    descriptionOfItem = table.Column<string>(nullable: true),
-                    title = table.Column<string>(nullable: true),
+                    ImageOfItem = table.Column<string>(nullable: false),
+                    DescriptionOfItem = table.Column<string>(maxLength: 300, nullable: false),
                     ItemId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -64,42 +67,14 @@ namespace VareDatabase.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Time",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    expiration = table.Column<DateTime>(nullable: false),
-                    timeOfCreation = table.Column<DateTime>(nullable: false),
-                    ItemId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Time", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Time_Item_ItemId",
-                        column: x => x.ItemId,
-                        principalTable: "Item",
-                        principalColumn: "ItemId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
-                name: "IX_Bid_ItemId",
+                name: "IX_Bid_Bid",
                 table: "Bid",
-                column: "ItemId",
-                unique: true);
+                column: "Bid");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Description_ItemId",
                 table: "Description",
-                column: "ItemId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Time_ItemId",
-                table: "Time",
                 column: "ItemId",
                 unique: true);
         }
@@ -111,9 +86,6 @@ namespace VareDatabase.Migrations
 
             migrationBuilder.DropTable(
                 name: "Description");
-
-            migrationBuilder.DropTable(
-                name: "Time");
 
             migrationBuilder.DropTable(
                 name: "Item");

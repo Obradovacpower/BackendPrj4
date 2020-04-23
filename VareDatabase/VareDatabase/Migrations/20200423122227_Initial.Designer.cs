@@ -10,7 +10,7 @@ using VareDatabase.DBContext;
 namespace VareDatabase.Migrations
 {
     [DbContext(typeof(VareDataModelContext))]
-    [Migration("20200417130602_Initial")]
+    [Migration("20200423122227_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,22 +28,18 @@ namespace VareDatabase.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("Bid")
+                        .HasColumnType("int");
+
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId_forLastBid")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId_forSeller")
-                        .HasColumnType("int");
-
-                    b.Property<int>("price")
+                    b.Property<int>("UserIdBuyer")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ItemId")
-                        .IsUnique();
+                    b.HasIndex("Bid");
 
                     b.ToTable("Bid");
                 });
@@ -55,17 +51,17 @@ namespace VareDatabase.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("DescriptionOfItem")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(300)")
+                        .HasMaxLength(300);
+
+                    b.Property<string>("ImageOfItem")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
-
-                    b.Property<string>("descriptionOfItem")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("imageOfItem")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("title")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -82,43 +78,37 @@ namespace VareDatabase.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("BuyOutPrice")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(120)")
+                        .HasMaxLength(120);
+
                     b.Property<string>("Type")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserIdSeller")
+                        .HasColumnType("int");
 
                     b.HasKey("ItemId");
 
                     b.ToTable("Item");
                 });
 
-            modelBuilder.Entity("VareDatabase.Models.TimeEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("expiration")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("timeOfCreation")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemId")
-                        .IsUnique();
-
-                    b.ToTable("Time");
-                });
-
             modelBuilder.Entity("VareDatabase.Models.BidEntity", b =>
                 {
                     b.HasOne("VareDatabase.Models.ItemEntity", "Item")
-                        .WithOne("Bid")
-                        .HasForeignKey("VareDatabase.Models.BidEntity", "ItemId")
+                        .WithMany("Bids")
+                        .HasForeignKey("Bid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -128,15 +118,6 @@ namespace VareDatabase.Migrations
                     b.HasOne("VareDatabase.Models.ItemEntity", "Item")
                         .WithOne("Description")
                         .HasForeignKey("VareDatabase.Models.DescriptionEntity", "ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("VareDatabase.Models.TimeEntity", b =>
-                {
-                    b.HasOne("VareDatabase.Models.ItemEntity", "Item")
-                        .WithOne("Time")
-                        .HasForeignKey("VareDatabase.Models.TimeEntity", "ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

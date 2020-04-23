@@ -9,8 +9,28 @@ namespace VareDatabase
 {
     public class DummyData
     {
+        public void CreateNewItem(int buyOut, int expire, string type, string title, string description, VareDataModelContext db)
+        {
+            ItemEntity item = new ItemEntity()
+            {
+                BuyOutPrice = buyOut,
+                DateCreated = DateTime.Now,
+                ExpirationDate = DateTime.Now.AddDays(expire),
+                Type = type,
+                Title = title,
+                Description = new DescriptionEntity()
+                {
+                    DescriptionOfItem = description,
+                    ImageOfItem = "Empty"
+                }
+            };
+            db.Add(item);
+            db.SaveChanges();
+
+        }
         public void InsertDummyData(VareDataModelContext db)
         {
+            CreateNewItem(10, 2, "Bow", "Bow of Epicness", "This bow is really epic", db);
             //Bows
             ItemEntity DeluxeBow = new ItemEntity()
             {
@@ -206,7 +226,7 @@ namespace VareDatabase
             {
                 BuyOutPrice = 500,
                 DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                ExpirationDate = new DateTime(2020, 6, 5),
                 Type = "Arrow",
                 Title = "Arrow with rubber head",
                 UserIdSeller = 89,
@@ -244,7 +264,7 @@ namespace VareDatabase
             {
                 BuyOutPrice = 3000,
                 DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                ExpirationDate = new DateTime(2021, 10, 3),
                 Type = "Bowset",
                 Title = "Children bow set - beginner",
                 UserIdSeller = 77,
@@ -282,8 +302,8 @@ namespace VareDatabase
             ItemEntity Bowset2 = new ItemEntity()
             {
                 BuyOutPrice = 3000,
-                DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                DateCreated = new DateTime(1605, 2, 3),
+                ExpirationDate = new DateTime(1605, 5, 12),
                 Type = "Bowset",
                 Title = "Bow set - beginner",
                 UserIdSeller = 77,
@@ -357,17 +377,17 @@ namespace VareDatabase
             Dagger.Bid.UserId_forLastBid = 3333;
             Dagger.Bid.price = 200;
             db.Add(Dagger);*/
-            ItemEntity Dagger = new ItemEntity()
+            ItemEntity Warglaive = new ItemEntity()
             {
                 BuyOutPrice = 3000,
-                DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
-                Type = "Dagger",
-                Title = "Dagger - leather handle",
+                DateCreated = new DateTime(2007, 5, 3),
+                ExpirationDate = new DateTime(2007, 12, 24),
+                Type = "Warglaive",
+                Title = "Warglive of Azzinoth",
                 UserIdSeller = 97,
                 Description = new DescriptionEntity()
                 {
-                    DescriptionOfItem = "Small dagger to used by theifs and scoundrels",
+                    DescriptionOfItem = "Good for Pvp",
                     ImageOfItem = "empty"
                 },
                 Bids = new List<BidEntity>
@@ -384,8 +404,8 @@ namespace VareDatabase
                     }
                 }
             };
-            db.Add(Dagger);
-            */
+            db.Add(Warglaive);
+
             //Sværd
             /*ItemEntity OneHandSword = new ItemEntity();
             OneHandSword.Type = "Sword";
@@ -396,11 +416,12 @@ namespace VareDatabase
             OneHandSword.Bid.userID_forLastBid = 3333;
             OneHandSword.Bid.price = 200;
             db.Add(OneHandSword);*/
+            DateTime dt = new DateTime(2020, 3, 4);
             ItemEntity OneHandSword = new ItemEntity()
             {
                 BuyOutPrice = 3000,
-                DateCreated = DateTime.Now,
-                ExpirationDate = new DateTime(2020, 12, 24),
+                DateCreated = dt,
+                ExpirationDate = dt.AddDays(10),
                 Type = "Sword",
                 Title = "One handed sword - leather handle",
                 UserIdSeller = 22,
