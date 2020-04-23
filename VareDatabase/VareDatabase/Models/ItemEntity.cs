@@ -24,6 +24,7 @@ namespace VareDatabase.Models
         public DateTime DateCreated { get; set; }
         [Required]
         public int UserIdSeller { get; set; }
+        public bool Sold { get; set; } = false;
 
         //Navigational property
         public DescriptionEntity Description { get; set; }

@@ -26,8 +26,26 @@ namespace VareDatabase
             };
             db.Add(item);
             db.SaveChanges();
+        }
+        public void SoftDeleteItem()
+        {
 
         }
+        public void GetItem()
+        {
+
+        }
+        public void EditDescription()
+        {
+
+        }
+        public void DeleteImage()
+        {
+
+        }
+        public void AddImage(string image) { }
+        public void EditType(string type) { }
+        public void ExtendExpirationDate(int itemId) { }
         public void InsertDummyData(VareDataModelContext db)
         {
             CreateNewItem(10, 2, "Bow", "Bow of Epicness", "This bow is really epic", db);
