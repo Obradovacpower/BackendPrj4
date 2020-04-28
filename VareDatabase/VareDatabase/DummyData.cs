@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
+using System.Linq;
 using VareDatabase.DBContext;
 using VareDatabase.Models;
 
@@ -9,43 +10,118 @@ namespace VareDatabase
 {
     public class DummyData
     {
-        public void CreateNewItem(int buyOut, int expire, string type, string title, string description, VareDataModelContext db)
+        public void CreateNewItem(int buyOut,int userId, int expire, string[] tags, string title, string description, string[] images, VareDataModelContext db)
         {
-            ItemEntity item = new ItemEntity()
+            List<ImageEntity> newImages = new List<ImageEntity>();
+            for(int i = 0; i < images.Length; i++)
+            {
+                ImageEntity item = new ImageEntity();
+                item.ImageOfItem = images[i];
+                newImages[i] = item;
+            }
+            List<TagEntity> newTags = new List<TagEntity>();
+            for (int i = 0; i < tags.Length; i++)
+            {
+                TagEntity tag = new TagEntity();
+                tag.Type = tags[i];
+                newTags[i] = tag;
+            }
+            ItemEntity itemEntity = new ItemEntity()
             {
                 BuyOutPrice = buyOut,
                 DateCreated = DateTime.Now,
                 ExpirationDate = DateTime.Now.AddDays(expire),
-                Type = type,
                 Title = title,
-                Description = new DescriptionEntity()
-                {
-                    DescriptionOfItem = description,
-                    ImageOfItem = "Empty"
-                }
+                Images = newImages,
+                Tags = newTags,
+                DescriptionOfItem = description,
+                UserIdSeller = userId,
             };
-            db.Add(item);
+            db.Add(itemEntity);
             db.SaveChanges();
         }
-        public void SoftDeleteItem()
+        public void SoftDeleteItem(int itemId, VareDataModelContext db)
+        {
+            var items = db.Set<ItemEntity>().ToList();
+            ItemEntity itemToDelete = items.First(x => x.ItemId == itemId);
+            itemToDelete.Sold = true;
+            db.SaveChanges();
+        }
+        private void ErrorMessage(Exception e)
         {
 
         }
-        public void GetItem()
+        public void EditItem(int itemId, VareDataModelContext db, int expire = 0, int buyOut = 0, string description = null)
         {
-
+            ItemEntity item = db.Set<ItemEntity>().ToList().First(x=> x.ItemId == itemId);
+            if(item == null) 
+            {
+                //make sure we find an item
+                return;
+            }
+            //DateTime.Compare(itemToFind.Expiration, DateTime.Now) >= 0
+            if(expire > 0 && item.Bids == null && item.ExpirationDate < DateTime.Now) //make sure no bids are made and is after current date
+            {
+                item.ExpirationDate.AddDays(expire);
+            }
+            if((buyOut < item.BuyOutPrice && buyOut > 0) && item.ExpirationDate < DateTime.Now)
+            {
+                item.BuyOutPrice = buyOut;
+            }
+            if(description != null)
+            {
+                item.DescriptionOfItem = description;
+            }
         }
-        public void EditDescription()
+        public void AddTag(int itemId, string newTag, VareDataModelContext db)
         {
+            ItemEntity item = db.Set<ItemEntity>().ToList().First(x => x.ItemId == itemId);
+            if(item == null)
+            {
+                return;
+            }
+            bool exists = false;
+            foreach(TagEntity t in item.Tags)
+            {
+                if(t.Type == newTag)
+                {
+                    exists = true;
+                }
+            }
+            if(!exists)
+            {
+                item.Tags.Add(new TagEntity()
+                {
+                    Type = newTag,
+                });
+            }
+        }
+        public void RemoveTag(int itemId, string tagToRemove, VareDataModelContext db)
+        {
+            //find item, then find if tag exist
+            //then delete the desired tag
+            ItemEntity item = db.Set<ItemEntity>().ToList().First(x => (x.ItemId == itemId));
+            if(item != null)
+            {
+                foreach(TagEntity tag in item.Tags)
+                {
+                    if(tag.Type == tagToRemove)
+                    {
+                        item.Tags.Remove(tag);
+                        break;
+                    }
+                }
+            }
 
         }
         public void DeleteImage()
         {
+            //make sure atleast one image is on the item
+        }
+        public void AddImage(string image) 
+        {
 
         }
-        public void AddImage(string image) { }
-        public void EditType(string type) { }
-        public void ExtendExpirationDate(int itemId) { }
         public void InsertDummyData(VareDataModelContext db)
         {
             CreateNewItem(10, 2, "Bow", "Bow of Epicness", "This bow is really epic", db);
@@ -58,7 +134,7 @@ namespace VareDatabase
                 Type = "Bow",
                 Title = "Elven Bow BUY NOW",
                 UserIdSeller = 12,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Powerful bow that is best at the range of 30-50 meters",
                     ImageOfItem = "empty"
@@ -96,7 +172,7 @@ namespace VareDatabase
                 Type = "Bow",
                 Title = "Good beginner bow made of wood",
                 UserIdSeller = 35,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Bow for the beginners who are learning to shoot arrows",
                     ImageOfItem = "empty"
@@ -134,7 +210,7 @@ namespace VareDatabase
                 Type = "Bow",
                 Title = "Longbow - 30-50 meters",
                 UserIdSeller = 35,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Longbow that is best at range of 50-100 meters",
                     ImageOfItem = "empty"
@@ -172,7 +248,7 @@ namespace VareDatabase
                 Type = "Quiver",
                 Title = "Seeker quiver - black",
                 UserIdSeller = 64,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Quiver to hold your arrows and hold on your back. Can hold up to 20 arrows",
                     ImageOfItem = "empty"
@@ -210,7 +286,7 @@ namespace VareDatabase
                 Type = "Quiver",
                 Title = "Hunting quiver - Brown",
                 UserIdSeller = 37,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Quiver to hold your arrows and hold on your back. Can hold up to 25 arrows",
                     ImageOfItem = "empty"
@@ -248,7 +324,7 @@ namespace VareDatabase
                 Type = "Arrow",
                 Title = "Arrow with rubber head",
                 UserIdSeller = 89,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Arrow with rubber head. Made for bows that shoot between 30-50 meters",
                     ImageOfItem = "empty"
@@ -286,7 +362,7 @@ namespace VareDatabase
                 Type = "Bowset",
                 Title = "Children bow set - beginner",
                 UserIdSeller = 77,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Beginner bow set for children",
                     ImageOfItem = "empty"
@@ -325,7 +401,7 @@ namespace VareDatabase
                 Type = "Bowset",
                 Title = "Bow set - beginner",
                 UserIdSeller = 77,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Beginner bow set for adults",
                     ImageOfItem = "empty"
@@ -364,7 +440,7 @@ namespace VareDatabase
                 Type = "Bowset",
                 Title = "Longbow set - beginner",
                 UserIdSeller = 98,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Beginner longbow set for adults",
                     ImageOfItem = "empty"
@@ -403,7 +479,7 @@ namespace VareDatabase
                 Type = "Warglaive",
                 Title = "Warglive of Azzinoth",
                 UserIdSeller = 97,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Good for Pvp",
                     ImageOfItem = "empty"
@@ -443,7 +519,7 @@ namespace VareDatabase
                 Type = "Sword",
                 Title = "One handed sword - leather handle",
                 UserIdSeller = 22,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "One handed sword that is used together with a shield",
                     ImageOfItem = "empty"
@@ -482,7 +558,7 @@ namespace VareDatabase
                 Type = "Sword",
                 Title = "Two handed sword - leather handle",
                 UserIdSeller = 22,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Two handed sword for combat",
                     ImageOfItem = "empty"
@@ -521,7 +597,7 @@ namespace VareDatabase
                 Type = "Shield",
                 Title = "Round one handed shield of tree",
                 UserIdSeller = 50,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Round shield for one hand made af tree with edge of metal",
                     ImageOfItem = "empty"
@@ -559,7 +635,7 @@ namespace VareDatabase
                 Type = "Shield",
                 Title = "Round one handed shield of metal",
                 UserIdSeller = 50,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Round shield for one hand made af metal",
                     ImageOfItem = "empty"
@@ -598,7 +674,7 @@ namespace VareDatabase
                 Type = "Shield",
                 Title = "Knight shield of metal",
                 UserIdSeller = 50,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Knight shield made of metal with straps so it can be put on your back",
                     ImageOfItem = "empty"
@@ -636,7 +712,7 @@ namespace VareDatabase
                 Type = "Shield",
                 Title = "Square shield of metal",
                 UserIdSeller = 69,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Square shield made of metal. Good for roman formations",
                     ImageOfItem = "empty"
@@ -677,7 +753,7 @@ namespace VareDatabase
                 Type = "Bracers",
                 Title = "Brown leather bracers",
                 UserIdSeller = 55,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Brown lightweight bracers made of leather",
                     ImageOfItem = "empty"
@@ -715,7 +791,7 @@ namespace VareDatabase
                 Type = "Bracers",
                 Title = "Black leather bracers",
                 UserIdSeller = 55,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Black lightweight bracers made of leather",
                     ImageOfItem = "empty"
@@ -754,7 +830,7 @@ namespace VareDatabase
                 Type = "Bracers",
                 Title = "Metal bracers",
                 UserIdSeller = 55,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Bracers made of metal",
                     ImageOfItem = "empty"
@@ -792,7 +868,7 @@ namespace VareDatabase
                 Type = "Boots",
                 Title = "Brown leather boots",
                 UserIdSeller = 62,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Lightweight boots made of brown leather",
                     ImageOfItem = "empty"
@@ -830,7 +906,7 @@ namespace VareDatabase
                 Type = "Boots",
                 Title = "Black leather boots",
                 UserIdSeller = 52,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Lightweight boots made of black leather",
                     ImageOfItem = "empty"
@@ -868,7 +944,7 @@ namespace VareDatabase
                 Type = "Boots",
                 Title = "Metal boots",
                 UserIdSeller = 82,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Heavy boots made of metal",
                     ImageOfItem = "empty"
@@ -907,7 +983,7 @@ namespace VareDatabase
                 Type = "Breastplate",
                 Title = "Breastplate - Brown leather",
                 UserIdSeller = 57,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Lightweight breastplate made of hardened brown leather",
                     ImageOfItem = "empty"
@@ -946,7 +1022,7 @@ namespace VareDatabase
                 Type = "Breastplate",
                 Title = "Breastplate - Black leather",
                 UserIdSeller = 57,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Lightweight breastplate made of hardened black leather",
                     ImageOfItem = "empty"
@@ -985,7 +1061,7 @@ namespace VareDatabase
                 Type = "Breastplate",
                 Title = "Breastplate - Metal",
                 UserIdSeller = 57,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Heavy breastplate made of metal",
                     ImageOfItem = "empty"
@@ -1023,7 +1099,7 @@ namespace VareDatabase
                 Type = "Helmet",
                 Title = "Roman ridge helmet",
                 UserIdSeller = 57,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Roman helmet with red ridge for protection of the head",
                     ImageOfItem = "empty"
@@ -1062,7 +1138,7 @@ namespace VareDatabase
                 Type = "Helmet",
                 Title = "Viking helmet",
                 UserIdSeller = 57,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Viking helmet for protection of the head",
                     ImageOfItem = "empty"
@@ -1101,7 +1177,7 @@ namespace VareDatabase
                 Type = "Helmet",
                 Title = "Knight helmet",
                 UserIdSeller = 69,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Knight helmet that covers the whole face",
                     ImageOfItem = "empty"
@@ -1140,7 +1216,7 @@ namespace VareDatabase
                 Type = "Gloves",
                 Title = "Gloves - Brown leather",
                 UserIdSeller = 75,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Medieval gloves made of brown leather",
                     ImageOfItem = "empty"
@@ -1179,7 +1255,7 @@ namespace VareDatabase
                 Type = "Gloves",
                 Title = "Gloves - Black leather",
                 UserIdSeller = 16,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Medieval gloves made of black leather",
                     ImageOfItem = "empty"
@@ -1217,7 +1293,7 @@ namespace VareDatabase
                 Type = "Gloves",
                 Title = "Gloves - Metal",
                 UserIdSeller = 16,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Medieval gloves made of metal",
                     ImageOfItem = "empty"
@@ -1259,7 +1335,7 @@ namespace VareDatabase
                 Type = "Accesories",
                 Title = "Large elixir flask",
                 UserIdSeller = 70,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Large glass flask for elixirs",
                     ImageOfItem = "empty"
@@ -1298,7 +1374,7 @@ namespace VareDatabase
                 Type = "Accesories",
                 Title = "Small elixir flask",
                 UserIdSeller = 70,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Small glass flask for elixirs",
                     ImageOfItem = "empty"
@@ -1337,7 +1413,7 @@ namespace VareDatabase
                 Type = "Accesories",
                 Title = "Elixir flask bag",
                 UserIdSeller = 55,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Bag to hold you elixir flasks",
                     ImageOfItem = "empty"
@@ -1366,7 +1442,7 @@ namespace VareDatabase
                 Type = "Accesories",
                 Title = "Elven Bow BUY NOW",
                 UserIdSeller = 1,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "Drinking horn of real cow horn. Can hold up to 0,5 liters",
                     ImageOfItem = "empty"
@@ -1395,7 +1471,7 @@ namespace VareDatabase
                 Type = "Accesories",
                 Title = "Elf Ears ",
                 UserIdSeller = 99,
-                Description = new DescriptionEntity()
+                Description = new ImageEntity()
                 {
                     DescriptionOfItem = "These elf ears are gonna turn you into a high elf. YOu will gain the ability of nightvision and be able to speak elvish, and you don't need sleep!",
                     ImageOfItem = "Coolest elf ears in the world!"

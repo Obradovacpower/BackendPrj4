@@ -12,8 +12,6 @@ namespace VareDatabase.Models
         [Key]
         public int ItemId { get; set; }
         [Required]
-        public string Type { get; set; }
-        [Required]
         [MaxLength(120)]
         public string Title { get; set; }
         [Required]
@@ -24,10 +22,14 @@ namespace VareDatabase.Models
         public DateTime DateCreated { get; set; }
         [Required]
         public int UserIdSeller { get; set; }
+        [Required]
+        [MaxLength(300)]
+        public string DescriptionOfItem { get; set; }
         public bool Sold { get; set; } = false;
 
         //Navigational property
-        public DescriptionEntity Description { get; set; }
+        public ICollection<ImageEntity> Images { get; set; }
+        public ICollection<TagEntity> Tags { get; set; }
         public ICollection<BidEntity> Bids { get; set; }
     }
 }

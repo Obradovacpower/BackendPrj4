@@ -20,9 +20,10 @@ namespace VareDatabase.DBContext
         //Erm: @"Data Source=(localdb)\MSSQLLocalDB;TrustServerCertificate=False;MultiSubnetFailover=False;database=testDB;"
         //Gus: @"Data Source=localhost,1433;Database=vareDatabase;User ID=SA;Password=Password1!;"
 
-        public DbSet<ItemEntity> Item { get; set; }
-        public DbSet<BidEntity> Bid { get; set; }
-        public DbSet<DescriptionEntity> Description { get; set; }
+        public DbSet<ItemEntity> Items { get; set; }
+        public DbSet<BidEntity> Bids { get; set; }
+        public DbSet<ImageEntity> Images { get; set; }
+        public DbSet<TagEntity> Tags { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,10 +32,15 @@ namespace VareDatabase.DBContext
                 .WithMany(b => b.Bids)
                 .HasForeignKey(b => b.Bid);
 
-            modelBuilder.Entity<ItemEntity>()
-                .HasOne(a => a.Description)
-                .WithOne(b => b.Item)
-                .HasForeignKey<DescriptionEntity>(e => e.ItemId);
+            modelBuilder.Entity<ImageEntity>()
+                .HasOne(a => a.Item)
+                .WithMany(b => b.Images)
+                .HasForeignKey(e => e.ItemId);
+
+            modelBuilder.Entity<TagEntity>()
+                .HasOne(a => a.Item)
+                .WithMany(b => b.Tags)
+                .HasForeignKey(b => b.ItemId);
         }
 
     }
