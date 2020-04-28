@@ -23,16 +23,16 @@ namespace VareDatabase.Controllers
 
         // GET: api/ItemEntities
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ItemEntity>>> GetItem()
+        public async Task<ActionResult<IEnumerable<ItemEntity>>> GetItems()
         {
-            return await _context.Item.ToListAsync();
+            return await _context.Items.ToListAsync();
         }
 
         // GET: api/ItemEntities/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ItemEntity>> GetItemEntity(int id)
         {
-            var itemEntity = await _context.Item.FindAsync(id);
+            var itemEntity = await _context.Items.FindAsync(id);
 
             if (itemEntity == null)
             {
@@ -80,7 +80,7 @@ namespace VareDatabase.Controllers
         [HttpPost]
         public async Task<ActionResult<ItemEntity>> PostItemEntity(ItemEntity itemEntity)
         {
-            _context.Item.Add(itemEntity);
+            _context.Items.Add(itemEntity);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetItemEntity", new { id = itemEntity.ItemId }, itemEntity);
@@ -90,13 +90,13 @@ namespace VareDatabase.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<ItemEntity>> DeleteItemEntity(int id)
         {
-            var itemEntity = await _context.Item.FindAsync(id);
+            var itemEntity = await _context.Items.FindAsync(id);
             if (itemEntity == null)
             {
                 return NotFound();
             }
 
-            _context.Item.Remove(itemEntity);
+            _context.Items.Remove(itemEntity);
             await _context.SaveChangesAsync();
 
             return itemEntity;
@@ -104,7 +104,7 @@ namespace VareDatabase.Controllers
 
         private bool ItemEntityExists(int id)
         {
-            return _context.Item.Any(e => e.ItemId == id);
+            return _context.Items.Any(e => e.ItemId == id);
         }
     }
 }

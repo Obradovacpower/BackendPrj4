@@ -10,7 +10,7 @@ using VareDatabase.DBContext;
 namespace VareDatabase.Migrations
 {
     [DbContext(typeof(VareDataModelContext))]
-    [Migration("20200423122227_Initial")]
+    [Migration("20200428143420_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,20 +41,15 @@ namespace VareDatabase.Migrations
 
                     b.HasIndex("Bid");
 
-                    b.ToTable("Bid");
+                    b.ToTable("Bids");
                 });
 
-            modelBuilder.Entity("VareDatabase.Models.DescriptionEntity", b =>
+            modelBuilder.Entity("VareDatabase.Models.ImageEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("DescriptionOfItem")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
 
                     b.Property<string>("ImageOfItem")
                         .IsRequired()
@@ -65,10 +60,9 @@ namespace VareDatabase.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ItemId")
-                        .IsUnique();
+                    b.HasIndex("ItemId");
 
-                    b.ToTable("Description");
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("VareDatabase.Models.ItemEntity", b =>
@@ -84,24 +78,48 @@ namespace VareDatabase.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("DescriptionOfItem")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(300)")
+                        .HasMaxLength(300);
+
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("Sold")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(120)")
                         .HasMaxLength(120);
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("UserIdSeller")
                         .HasColumnType("int");
 
                     b.HasKey("ItemId");
 
-                    b.ToTable("Item");
+                    b.ToTable("Items");
+                });
+
+            modelBuilder.Entity("VareDatabase.Models.TagEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
+
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("VareDatabase.Models.BidEntity", b =>
@@ -113,11 +131,20 @@ namespace VareDatabase.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("VareDatabase.Models.DescriptionEntity", b =>
+            modelBuilder.Entity("VareDatabase.Models.ImageEntity", b =>
                 {
                     b.HasOne("VareDatabase.Models.ItemEntity", "Item")
-                        .WithOne("Description")
-                        .HasForeignKey("VareDatabase.Models.DescriptionEntity", "ItemId")
+                        .WithMany("Images")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("VareDatabase.Models.TagEntity", b =>
+                {
+                    b.HasOne("VareDatabase.Models.ItemEntity", "Item")
+                        .WithMany("Tags")
+                        .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

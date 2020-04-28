@@ -41,6 +41,26 @@ namespace VareDatabase
             db.Add(itemEntity);
             db.SaveChanges();
         }
+        public void AddBid(int itemId, int bid, int userId, VareDataModelContext db)
+        {
+            ItemEntity item = db.Set<ItemEntity>().Find(itemId);
+            if(item != null)
+            {
+                foreach(BidEntity b in item.Bids)
+                {
+                    if(b.Bid > bid)
+                    {
+                        return;
+                    }
+                }
+                item.Bids.Add(new BidEntity
+                {
+                    Bid = bid,
+                    UserIdBuyer = userId
+                });
+            }
+        }
+        //this essentially sells the item or makes it unavailable if expired
         public void SoftDeleteItem(int itemId, VareDataModelContext db)
         {
             var items = db.Set<ItemEntity>().ToList();
@@ -148,6 +168,11 @@ namespace VareDatabase
                 ImageOfItem = image
             });
         }
+        private int GetItemIdByName(string name, VareDataModelContext db)
+        {
+            ItemEntity item = db.Set<ItemEntity>().First(x => x.Title == name);
+            return item.ItemId;
+        }
         public void InsertDummyData(VareDataModelContext db)
         {
             //Bows
@@ -176,6 +201,10 @@ namespace VareDatabase
                     {
                         Type = "Elven"
                     },
+                    new TagEntity
+                    {
+                        Type = "wood"
+                    }
                 },
                 Bids = new List<BidEntity>
                 {
@@ -281,7 +310,6 @@ namespace VareDatabase
                 }
             };
             db.Add(Longbow);
-
 
             ItemEntity SeekerQuiver = new ItemEntity()
             {
@@ -475,16 +503,6 @@ namespace VareDatabase
             };
             db.Add(Bowset);
 
-            /*ItemEntity Bowset2 = new ItemEntity();
-            Bowset2.Type = "Bowset";
-            Bowset2.Description.descriptionOfItem = "Beginner bow set for adults";
-            Bowset2.Description.imageOfItem = "empty";
-            Bowset2.Description.title = "Bow set - beginner";
-            Bowset2.Bid.UserId_forSeller = 2222;
-            Bowset2.Bid.UserId_forLastBid = 5555;
-            Bowset2.Bid.price = 500;
-            db.Add(Bowset2);*/
-
             ItemEntity Bowset2 = new ItemEntity()
             {
                 BuyOutPrice = 3000,
@@ -542,16 +560,6 @@ namespace VareDatabase
                 }
             };
             db.Add(Bowset2);
-
-            /*ItemEntity Bowset3 = new ItemEntity();
-            Bowset3.Type = "Bowset";
-            Bowset3.Description.descriptionOfItem = "Beginner longbow set for adults";
-            Bowset3.Description.imageOfItem = "empty";
-            Bowset3.Description.title = "Longbow set - beginner";
-            Bowset3.Bid.UserId_forSeller = 2222;
-            Bowset3.Bid.UserId_forLastBid = 5555;
-            Bowset3.Bid.price = 600;
-            db.Add(Bowset3);*/
 
             ItemEntity Bowset3 = new ItemEntity()
             {
@@ -611,16 +619,7 @@ namespace VareDatabase
             };
             db.Add(Bowset3);
 
-
-            /*ItemEntity Dagger = new ItemEntity();
-            Dagger.Type = "Dagger";
-            Dagger.Description.descriptionOfItem = "Small dagger to used by theifs and scoundrels";
-            Dagger.Description.imageOfItem = "empty";
-            Dagger.Description.title = "Dagger - leather handle";
-            Dagger.Bid.UserId_forSeller = 1111;
-            Dagger.Bid.UserId_forLastBid = 3333;
-            Dagger.Bid.price = 200;
-            db.Add(Dagger);*/
+            //melee
             ItemEntity Warglaive = new ItemEntity()
             {
                 BuyOutPrice = 3000,
@@ -640,11 +639,11 @@ namespace VareDatabase
                 {
                     new TagEntity
                     {
-                        Type = "Demon"
+                        Type = "Demon-Hunter"
                     },
                     new TagEntity
                     {
-                        Type = "Hunter"
+                        Type = "One-handed"
                     },
                     new TagEntity
                     {
@@ -671,16 +670,6 @@ namespace VareDatabase
             };
             db.Add(Warglaive);
 
-            //Sværd
-            /*ItemEntity OneHandSword = new ItemEntity();
-            OneHandSword.Type = "Sword";
-            OneHandSword.Description.descriptionOfItem = "One handed sword that is used together with a shield";
-            OneHandSword.Description.imageOfItem = "empty";
-            OneHandSword.Description.title = "One handed sword - leather handle";
-            OneHandSword.Bid.userID_forSeller = 1111;
-            OneHandSword.Bid.userID_forLastBid = 3333;
-            OneHandSword.Bid.price = 200;
-            db.Add(OneHandSword);*/
             DateTime dt = new DateTime(2020, 3, 4);
             ItemEntity OneHandSword = new ItemEntity()
             {
@@ -728,16 +717,6 @@ namespace VareDatabase
             };
             db.Add(OneHandSword);
 
-
-            /*ItemEntity TwoHandSword = new ItemEntity();
-            TwoHandSword.Type = "Sword";
-            TwoHandSword.Description.descriptionOfItem = "Two handed sword that for combat";
-            TwoHandSword.Description.imageOfItem = "empty";
-            TwoHandSword.Description.title = "Two handed sword - leather handle";
-            TwoHandSword.Bid.userID_forSeller = 3333;
-            TwoHandSword.Bid.userID_forLastBid = 4444;
-            TwoHandSword.Bid.price = 300;
-            db.Add(TwoHandSword);*/
             ItemEntity TwoHandSword = new ItemEntity()
             {
                 BuyOutPrice = 3000,
@@ -784,16 +763,6 @@ namespace VareDatabase
             };
             db.Add(TwoHandSword);
 
-            //Skjold
-            /*ItemEntity RoundShieldTree = new ItemEntity();
-            RoundShieldTree.Type = "Shield";
-            RoundShieldTree.Description.descriptionOfItem = "Round shield for one hand made af tree with edge of metal";
-            RoundShieldTree.Description.imageOfItem = "empty";
-            RoundShieldTree.Description.title = "Round one handed shield of tree";
-            RoundShieldTree.Bid.userID_forSeller = 5555;
-            RoundShieldTree.Bid.userID_forLastBid = 1111;
-            RoundShieldTree.Bid.price = 275;
-            db.Add(RoundShieldTree);*/
             ItemEntity RoundShieldTree = new ItemEntity()
             {
                 BuyOutPrice = 2000,
@@ -844,15 +813,6 @@ namespace VareDatabase
             };
             db.Add(RoundShieldTree);
 
-            /*ItemEntity RoundShieldMetal = new ItemEntity();
-            RoundShieldMetal.Type = "Shield";
-            RoundShieldMetal.Description.descriptionOfItem = "Round shield for one hand made af metal";
-            RoundShieldMetal.Description.imageOfItem = "empty";
-            RoundShieldMetal.Description.title = "Round one handed shield of metal";
-            RoundShieldMetal.Bid.userID_forSeller = 5555;
-            RoundShieldMetal.Bid.userID_forLastBid = 3333;
-            RoundShieldMetal.Bid.price = 300;
-            db.Add(RoundShieldMetal);*/
             ItemEntity RoundShieldMetal = new ItemEntity()
             {
                 BuyOutPrice = 2000,
@@ -903,16 +863,6 @@ namespace VareDatabase
             };
             db.Add(RoundShieldMetal);
 
-            /*ItemEntity KnightShield = new ItemEntity();
-            KnightShield.Type = "Shield";
-            KnightShield.Description.descriptionOfItem = "Knight shield made of metal with straps so it can be put on your back";
-            KnightShield.Description.imageOfItem = "empty";
-            KnightShield.Description.title = "Knight shield of metal";
-            KnightShield.Bid.userID_forSeller = 2222;
-            KnightShield.Bid.userID_forLastBid = 3333;
-            KnightShield.Bid.price = 275;
-            db.Add(KnightShield);*/
-
             ItemEntity KnightShield = new ItemEntity()
             {
                 BuyOutPrice = 2000,
@@ -959,16 +909,13 @@ namespace VareDatabase
             };
             db.Add(KnightShield);
 
-            /*ItemEntity SquareShieldMetal = new ItemEntity();
-            SquareShieldMetal.Type = "Shield";
-            SquareShieldMetal.Description.descriptionOfItem = "Square shield made of metal. Good for roman formations";
-            SquareShieldMetal.Description.imageOfItem = "empty";
-            SquareShieldMetal.Description.title = "Square shield of metal";
-            SquareShieldMetal.Bid.userID_forSeller = 5555;
-            SquareShieldMetal.Bid.userID_forLastBid = 2222;
-            SquareShieldMetal.Bid.price = 325;
-            db.Add(SquareShieldMetal)*/;
-            ItemEntity SquareShieldMetal = new ItemEntity()
+            string[] tags = { "tower", "square", "metal" };
+            string[] images = { "empty" };
+            CreateNewItem(2000, 69, 60, tags, "Square shield of metal",
+                "Square shield made of metal. Good for roman formations", images, db);
+            AddBid(GetItemIdByName("Square shield of metal", db), 460, 1, db);
+            AddBid(GetItemIdByName("Square shield of metal", db), 480, 20, db);
+            /*ItemEntity SquareShieldMetal = new ItemEntity()
             {
                 BuyOutPrice = 2000,
                 DateCreated = DateTime.Now,
@@ -998,15 +945,6 @@ namespace VareDatabase
 
 
             //Rustning/udklædning
-            /*ItemEntity BracersBrownLeather = new ItemEntity();
-            BracersBrownLeather.Type = "Bracers";
-            BracersBrownLeather.Description.descriptionOfItem = "Brown lightweight bracers made of leather";
-            BracersBrownLeather.Description.imageOfItem = "empty";
-            BracersBrownLeather.Description.title = "Brown leather bracers";
-            BracersBrownLeather.Bid.userID_forSeller = 4444;
-            BracersBrownLeather.Bid.userID_forLastBid = 2222;
-            BracersBrownLeather.Bid.price = 400;
-            db.Add(BracersBrownLeather);*/
 
             ItemEntity BracersBrownLeather = new ItemEntity()
             {
@@ -1045,7 +983,7 @@ namespace VareDatabase
             BracersBlackLeather.Bid.userID_forSeller = 4444;
             BracersBlackLeather.Bid.userID_forLastBid = 1111;
             BracersBlackLeather.Bid.price = 400;
-            db.Add(BracersBlackLeather);*/
+            db.Add(BracersBlackLeather);
             ItemEntity BracersBlackLeather = new ItemEntity()
             {
                 BuyOutPrice = 1500,
@@ -1083,7 +1021,7 @@ namespace VareDatabase
             BracersMetal.Bid.userID_forSeller = 4444;
             BracersMetal.Bid.userID_forLastBid = 3333;
             BracersMetal.Bid.price = 500;
-            db.Add(BracersMetal);*/
+            db.Add(BracersMetal);
 
             ItemEntity BracersMetal = new ItemEntity()
             {
@@ -1122,7 +1060,7 @@ namespace VareDatabase
             BootsBrownLeather.Bid.userID_forSeller = 4444;
             BootsBrownLeather.Bid.userID_forLastBid = 2222;
             BootsBrownLeather.Bid.price = 450;
-            db.Add(BootsBrownLeather);*/
+            db.Add(BootsBrownLeather);
             ItemEntity BootsBrownLeather = new ItemEntity()
             {
                 BuyOutPrice = 1750,
@@ -1160,7 +1098,7 @@ namespace VareDatabase
             BootsBlackLeather.Bid.userID_forSeller = 4444;
             BootsBlackLeather.Bid.userID_forLastBid = 5555;
             BootsBlackLeather.Bid.price = 450;
-            db.Add(BootsBlackLeather);*/
+            db.Add(BootsBlackLeather);
             ItemEntity BootsBlackLeather = new ItemEntity()
             {
                 BuyOutPrice = 1750,
@@ -1198,7 +1136,7 @@ namespace VareDatabase
             BootsMetal.Bid.userID_forSeller = 4444;
             BootsMetal.Bid.userID_forLastBid = 5555;
             BootsMetal.Bid.price = 600;
-            db.Add(BootsMetal);*/
+            db.Add(BootsMetal);
             ItemEntity BootsMetal = new ItemEntity()
             {
                 BuyOutPrice = 1750,
@@ -1236,7 +1174,7 @@ namespace VareDatabase
             BreastplateBrownLeather.Bid.userID_forSeller = 4444;
             BreastplateBrownLeather.Bid.userID_forLastBid = 1111;
             BreastplateBrownLeather.Bid.price = 1200;
-            db.Add(BreastplateBrownLeather);*/
+            db.Add(BreastplateBrownLeather);
 
             ItemEntity BreastplateBrownLeather = new ItemEntity()
             {
@@ -1275,7 +1213,7 @@ namespace VareDatabase
             BreastplateBrownLeather.Bid.userID_forSeller = 4444;
             BreastplateBlackLeather.Bid.userID_forLastBid = 5555;
             BreastplateBlackLeather.Bid.price = 1200;
-            db.Add(BreastplateBlackLeather);*/
+            db.Add(BreastplateBlackLeather);
 
             ItemEntity BreastplateBlackLeather = new ItemEntity()
             {
@@ -1314,7 +1252,7 @@ namespace VareDatabase
             BreastplateMetal.Bid.userID_forSeller = 3333;
             BreastplateMetal.Bid.userID_forLastBid = 4444;
             BreastplateMetal.Bid.price = 1500;
-            db.Add(BreastplateMetal);*/
+            db.Add(BreastplateMetal);
 
             ItemEntity BreastplateMetal = new ItemEntity()
             {
@@ -1353,7 +1291,7 @@ namespace VareDatabase
             HelmetRoman.Bid.userID_forSeller = 3333;
             HelmetRoman.Bid.userID_forLastBid = 2222;
             HelmetRoman.Bid.price = 1200;
-            db.Add(HelmetRoman);*/
+            db.Add(HelmetRoman);
             ItemEntity HelmetRoman = new ItemEntity()
             {
                 BuyOutPrice = 4000,
@@ -1391,7 +1329,7 @@ namespace VareDatabase
             HelmetViking.Bid.userID_forSeller = 3333;
             HelmetViking.Bid.userID_forLastBid = 1111
             HelmetViking.Bid.price = 1000;
-            db.Add(HelmetViking);*/
+            db.Add(HelmetViking);
 
             ItemEntity HelmetViking = new ItemEntity()
             {
@@ -1430,7 +1368,7 @@ namespace VareDatabase
             HelmetKnight.Bid.userID_forSeller = 3333;
             HelmetKnight.Bid.userID_forLastBid = 5555;
             HelmetKnight.Bid.price = 1300;
-            db.Add(HelmetKnight);*/
+            db.Add(HelmetKnight);
 
             ItemEntity HelmetKnight = new ItemEntity()
             {
@@ -1469,7 +1407,7 @@ namespace VareDatabase
             GlovesBrownLeather.Bid.userID_forSeller = 5555;
             GlovesBrownLeather.Bid.userID_forLastBid = 3333;
             GlovesBrownLeather.Bid.price = 300;
-            db.Add(GlovesBrownLeather);*/
+            db.Add(GlovesBrownLeather);
 
             ItemEntity GlovesBrownLeather = new ItemEntity()
             {
@@ -1508,7 +1446,7 @@ namespace VareDatabase
             GlovesBlackLeather.Bid.userID_forSeller = 5555;
             GlovesBlackLeather.Bid.userID_forLastBid = 3333;
             GlovesBlackLeather.Bid.price = 300;
-            db.Add(GlovesBlackLeather);*/
+            db.Add(GlovesBlackLeather);
 
             ItemEntity GlovesBlackLeather = new ItemEntity()
             {
@@ -1547,7 +1485,7 @@ namespace VareDatabase
             GlovesBlackLeather.Bid.userID_forSeller = 5555;
             GlovesBlackLeather.Bid.userID_forLastBid = 1111;
             GlovesBlackLeather.Bid.price = 450;
-            db.Add(GlovesMetal);*/
+            db.Add(GlovesMetal);
             ItemEntity GlovesMetal = new ItemEntity()
             {
                 BuyOutPrice = 2000,
@@ -1588,7 +1526,7 @@ namespace VareDatabase
             ElixirFlaskLarge.Bid.userID_forSeller = 2222;
             ElixirFlaskLarge.Bid.userID_forLastBid = 1111;
             ElixirFlaskLarge.Bid.price = 50;
-            db.Add(ElixirFlaskLarge);*/
+            db.Add(ElixirFlaskLarge);
 
             ItemEntity ElixirFlaskLarge = new ItemEntity()
             {
@@ -1627,7 +1565,7 @@ namespace VareDatabase
             ElixirFlaskSmall.Bid.userID_forSeller = 5555;
             ElixirFlaskSmall.Bid.userID_forLastBid = 1111;
             ElixirFlaskSmall.Bid.price = 25;
-            db.Add(ElixirFlaskSmall);*/
+            db.Add(ElixirFlaskSmall);
 
             ItemEntity ElixirFlaskSmall = new ItemEntity()
             {
@@ -1666,7 +1604,7 @@ namespace VareDatabase
             ElixirFlaskSmall.Bid.userID_forSeller = 4444;
             ElixirFlaskSmall.Bid.userID_forLastBid = 2222;
             ElixirFlaskSmall.Bid.price = 350;
-            db.Add(ElixirFlaskSmall);*/
+            db.Add(ElixirFlaskSmall);
 
             ItemEntity FlaskBag = new ItemEntity()
             {
@@ -1779,7 +1717,7 @@ namespace VareDatabase
                     }
                 }
             };
-            db.Add(FlaskBag);
+            db.Add(FlaskBag);*/
         }
     }
 }

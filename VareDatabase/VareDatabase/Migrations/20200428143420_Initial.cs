@@ -8,25 +8,26 @@ namespace VareDatabase.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Item",
+                name: "Items",
                 columns: table => new
                 {
                     ItemId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Type = table.Column<string>(nullable: false),
                     Title = table.Column<string>(maxLength: 120, nullable: false),
                     BuyOutPrice = table.Column<int>(nullable: false),
                     ExpirationDate = table.Column<DateTime>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
-                    UserIdSeller = table.Column<int>(nullable: false)
+                    UserIdSeller = table.Column<int>(nullable: false),
+                    DescriptionOfItem = table.Column<string>(maxLength: 300, nullable: false),
+                    Sold = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Item", x => x.ItemId);
+                    table.PrimaryKey("PK_Items", x => x.ItemId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Bid",
+                name: "Bids",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -37,58 +38,84 @@ namespace VareDatabase.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Bid", x => x.Id);
+                    table.PrimaryKey("PK_Bids", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Bid_Item_Bid",
+                        name: "FK_Bids_Items_Bid",
                         column: x => x.Bid,
-                        principalTable: "Item",
+                        principalTable: "Items",
                         principalColumn: "ItemId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Description",
+                name: "Images",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ImageOfItem = table.Column<string>(nullable: false),
-                    DescriptionOfItem = table.Column<string>(maxLength: 300, nullable: false),
                     ItemId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Description", x => x.Id);
+                    table.PrimaryKey("PK_Images", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Description_Item_ItemId",
+                        name: "FK_Images_Items_ItemId",
                         column: x => x.ItemId,
-                        principalTable: "Item",
+                        principalTable: "Items",
+                        principalColumn: "ItemId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tags",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<string>(nullable: true),
+                    ItemId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tags_Items_ItemId",
+                        column: x => x.ItemId,
+                        principalTable: "Items",
                         principalColumn: "ItemId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bid_Bid",
-                table: "Bid",
+                name: "IX_Bids_Bid",
+                table: "Bids",
                 column: "Bid");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Description_ItemId",
-                table: "Description",
-                column: "ItemId",
-                unique: true);
+                name: "IX_Images_ItemId",
+                table: "Images",
+                column: "ItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tags_ItemId",
+                table: "Tags",
+                column: "ItemId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Bid");
+                name: "Bids");
 
             migrationBuilder.DropTable(
-                name: "Description");
+                name: "Images");
 
             migrationBuilder.DropTable(
-                name: "Item");
+                name: "Tags");
+
+            migrationBuilder.DropTable(
+                name: "Items");
         }
     }
 }

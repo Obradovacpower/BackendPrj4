@@ -14,7 +14,7 @@ namespace VareDatabase.Models
             {
                 context.Database.EnsureCreated();
                 //Dummiedata.
-                if (context.Item.Any())
+                if (context.Items.Any())
                 {
                     return;   // DB has been seeded
                 }
