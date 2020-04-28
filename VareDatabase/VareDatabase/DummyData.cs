@@ -37,6 +37,7 @@ namespace VareDatabase
                 DescriptionOfItem = description,
                 UserIdSeller = userId,
             };
+            GenerateTags(itemEntity.Title, itemEntity.ItemId, db);
             db.Add(itemEntity);
             db.SaveChanges();
         }
@@ -81,14 +82,14 @@ namespace VareDatabase
                 return;
             }
             bool exists = false;
-            foreach(TagEntity t in item.Tags)
+            foreach(TagEntity t in item.Tags) //check each tag if it exists
             {
                 if(t.Type == newTag)
                 {
                     exists = true;
                 }
             }
-            if(!exists)
+            if(!exists) //if it doesnt exist add it
             {
                 item.Tags.Add(new TagEntity()
                 {
@@ -96,12 +97,20 @@ namespace VareDatabase
                 });
             }
         }
+        private void GenerateTags(string nameOfItem, int itemId, VareDataModelContext db)
+        {
+            string[] words = nameOfItem.Split(' ', ',', '.');
+            foreach(string s in words)
+            {
+                AddTag(itemId, s, db);
+            }
+        }
         public void RemoveTag(int itemId, string tagToRemove, VareDataModelContext db)
         {
             //find item, then find if tag exist
             //then delete the desired tag
             ItemEntity item = db.Set<ItemEntity>().ToList().First(x => (x.ItemId == itemId));
-            if(item != null)
+            if(item != null && item.Tags.Count > 1)
             {
                 foreach(TagEntity tag in item.Tags)
                 {
@@ -114,30 +123,59 @@ namespace VareDatabase
             }
 
         }
-        public void DeleteImage()
+        public void DeleteImage(int itemId, int imageId, VareDataModelContext db)
         {
             //make sure atleast one image is on the item
+            ItemEntity item = db.Set<ItemEntity>().ToList().First(x => (x.ItemId == itemId));
+            if (item != null && item.Tags.Count > 1)
+            {
+                foreach (ImageEntity img in item.Images)
+                {
+                    if (img.Id == imageId)
+                    {
+                        item.Images.Remove(img);
+                        break;
+                    }
+                }
+                //if we get here no image was found with that id
+            }
         }
-        public void AddImage(string image) 
+        public void AddImage(int itemId, string image, VareDataModelContext db) 
         {
-
+            ItemEntity item = db.Set<ItemEntity>().First(x => x.ItemId == itemId);
+            item.Images.Add(new ImageEntity
+            {
+                ImageOfItem = image
+            });
         }
         public void InsertDummyData(VareDataModelContext db)
         {
-            CreateNewItem(10, 2, "Bow", "Bow of Epicness", "This bow is really epic", db);
             //Bows
             ItemEntity DeluxeBow = new ItemEntity()
             {
                 BuyOutPrice = 5000,
                 DateCreated = DateTime.Now,
                 ExpirationDate = new DateTime(2020, 12, 24),
-                Type = "Bow",
                 Title = "Elven Bow BUY NOW",
                 UserIdSeller = 12,
-                Description = new ImageEntity()
+                DescriptionOfItem = "Powerful bow that is best at the range of 30-50 meters",
+                Images = new List<ImageEntity>
                 {
-                    DescriptionOfItem = "Powerful bow that is best at the range of 30-50 meters",
-                    ImageOfItem = "empty"
+                    new ImageEntity
+                    {
+                        ImageOfItem = "empty"
+                    }
+                },
+                Tags = new List<TagEntity>
+                { 
+                    new TagEntity
+                    {
+                        Type = "Bow"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Elven"
+                    },
                 },
                 Bids = new List<BidEntity>
                 {
@@ -155,27 +193,31 @@ namespace VareDatabase
             };
             db.Add(DeluxeBow);
 
-            /*ItemEntity BeginnerBow = new ItemEntity();
-            BeginnerBow.Type = "Bow";
-            BeginnerBow.Description.descriptionOfItem = "Bow for the beginners who are learning to shoot arrows";
-            BeginnerBow.Description.imageOfItem = "empty";
-            BeginnerBow.Description.title = "Begginer bow - 10-30 meters";
-            BeginnerBow.Bid.UserId_forSeller = 2222;
-            BeginnerBow.Bid.UserId_forLastBid = 5555;
-            BeginnerBow.Bid.price = 300;
-            db.Add(BeginnerBow);*/
             ItemEntity BeginnerBow = new ItemEntity()
             {
                 BuyOutPrice = 5000,
                 DateCreated = DateTime.Now,
                 ExpirationDate = new DateTime(2020, 12, 24),
-                Type = "Bow",
                 Title = "Good beginner bow made of wood",
                 UserIdSeller = 35,
-                Description = new ImageEntity()
+                DescriptionOfItem = "Bow for the beginners who are learning to shoot arrows",
+                Images = new List<ImageEntity>
                 {
-                    DescriptionOfItem = "Bow for the beginners who are learning to shoot arrows",
-                    ImageOfItem = "empty"
+                    new ImageEntity
+                    {
+                        ImageOfItem = "empty"
+                    }
+                },
+                Tags = new List<TagEntity>
+                {
+                    new TagEntity
+                    {
+                        Type = "Bow"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Wood"
+                    },
                 },
                 Bids = new List<BidEntity>
                 {
@@ -193,27 +235,36 @@ namespace VareDatabase
             };
             db.Add(BeginnerBow);
 
-            /*ItemEntity Longbow = new ItemEntity();
-            Longbow.Type = "Bow";
-            Longbow.Description.descriptionOfItem = "Longbow that is best at range of 50-100 meters";
-            Longbow.Description.imageOfItem = "empty";
-            Longbow.Description.title = "Longbow - 30-50 meters";
-            Longbow.Bid.UserId_forSeller = 1111;
-            Longbow.Bid.UserId_forLastBid = 3333;
-            Longbow.Bid.price = 450;
-            db.Add(Longbow);*/
             ItemEntity Longbow = new ItemEntity()
             {
                 BuyOutPrice = 5000,
                 DateCreated = DateTime.Now,
                 ExpirationDate = new DateTime(2020, 12, 24),
-                Type = "Bow",
+                
                 Title = "Longbow - 30-50 meters",
                 UserIdSeller = 35,
-                Description = new ImageEntity()
+                DescriptionOfItem = "Selling a longbow, great quality!",
+                Images = new List<ImageEntity>
                 {
-                    DescriptionOfItem = "Longbow that is best at range of 50-100 meters",
-                    ImageOfItem = "empty"
+                    new ImageEntity
+                    {
+                        ImageOfItem = "empty"
+                    }
+                },
+                Tags = new List<TagEntity>
+                {
+                    new TagEntity
+                    {
+                        Type = "Long-Bow"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Bow"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Ranged"
+                    }
                 },
                 Bids = new List<BidEntity>
                 {
@@ -231,27 +282,32 @@ namespace VareDatabase
             };
             db.Add(Longbow);
 
-            /*ItemEntity SeekerQuiver = new ItemEntity();
-            SeekerQuiver.Type = "Quiver";
-            SeekerQuiver.Description.descriptionOfItem = "Quiver to hold your arrows and hold on your back";
-            SeekerQuiver.Description.imageOfItem = "empty";
-            SeekerQuiver.Description.title = "Seeker quiver - black";
-            SeekerQuiver.Bid.UserId_forSeller = 1111;
-            SeekerQuiver.Bid.UserId_forLastBid = 4444;
-            SeekerQuiver.Bid.price = 150;
-            db.Add(SeekerQuiver);*/
+
             ItemEntity SeekerQuiver = new ItemEntity()
             {
                 BuyOutPrice = 3000,
                 DateCreated = DateTime.Now,
                 ExpirationDate = new DateTime(2020, 12, 24),
-                Type = "Quiver",
                 Title = "Seeker quiver - black",
                 UserIdSeller = 64,
-                Description = new ImageEntity()
+                DescriptionOfItem = "Pairs great with a longbow, lighly used",
+                Images = new List<ImageEntity>
                 {
-                    DescriptionOfItem = "Quiver to hold your arrows and hold on your back. Can hold up to 20 arrows",
-                    ImageOfItem = "empty"
+                    new ImageEntity
+                    {
+                        ImageOfItem = "empty"
+                    }
+                },
+                Tags = new List<TagEntity>
+                {
+                    new TagEntity
+                    {
+                        Type = "Quiver"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Ranged"
+                    }
                 },
                 Bids = new List<BidEntity>
                 {
@@ -269,27 +325,31 @@ namespace VareDatabase
             };
             db.Add(SeekerQuiver);
 
-            /*ItemEntity HuntingQuiver = new ItemEntity();
-            HuntingQuiver.Type = "Quiver";
-            HuntingQuiver.Description.descriptionOfItem = "Quiver for hunting to hold your arrows and hold on your back";
-            HuntingQuiver.Description.imageOfItem = "empty";
-            HuntingQuiver.Description.title = "Hunting quiver - Brown";
-            HuntingQuiver.Bid.UserId_forSeller = 1111;
-            HuntingQuiver.Bid.UserId_forLastBid = 4444;
-            HuntingQuiver.Bid.price = 175;
-            db.Add(HuntingQuiver);*/
             ItemEntity HuntingQuiver = new ItemEntity()
             {
                 BuyOutPrice = 3000,
                 DateCreated = DateTime.Now,
                 ExpirationDate = new DateTime(2020, 12, 24),
-                Type = "Quiver",
                 Title = "Hunting quiver - Brown",
                 UserIdSeller = 37,
-                Description = new ImageEntity()
+                DescriptionOfItem = "can hold up to 15 arrows",
+                Images = new List<ImageEntity>
                 {
-                    DescriptionOfItem = "Quiver to hold your arrows and hold on your back. Can hold up to 25 arrows",
-                    ImageOfItem = "empty"
+                    new ImageEntity
+                    {
+                        ImageOfItem = "empty"
+                    }
+                },
+                Tags = new List<TagEntity>
+                {
+                    new TagEntity
+                    {
+                        Type = "Quiver"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Brown"
+                    }
                 },
                 Bids = new List<BidEntity>
                 {
@@ -307,27 +367,39 @@ namespace VareDatabase
             };
             db.Add(HuntingQuiver);
 
-            /*ItemEntity Arrow = new ItemEntity();
-            Arrow.Type = "Arrow";
-            Arrow.Description.descriptionOfItem = "Arrow with rubber head. Made for bows that shoot between 30-50 meters";
-            Arrow.Description.imageOfItem = "empty";
-            Arrow.Description.title = "Arrow with rubber head - 30-50 meters";
-            Arrow.Bid.UserId_forSeller = 2222;
-            Arrow.Bid.UserId_forLastBid = 4444;
-            Arrow.Bid.price = 25;
-            db.Add(Arrow);*/
             ItemEntity Arrow = new ItemEntity()
             {
                 BuyOutPrice = 500,
                 DateCreated = DateTime.Now,
                 ExpirationDate = new DateTime(2020, 6, 5),
-                Type = "Arrow",
                 Title = "Arrow with rubber head",
                 UserIdSeller = 89,
-                Description = new ImageEntity()
+                DescriptionOfItem = "Arrows, for your bow and quiver, There is a total of 12 arrows all the same quality",
+                Images = new List<ImageEntity>
                 {
-                    DescriptionOfItem = "Arrow with rubber head. Made for bows that shoot between 30-50 meters",
-                    ImageOfItem = "empty"
+                    new ImageEntity
+                    {
+                        ImageOfItem = "empty"
+                    }
+                },
+                Tags = new List<TagEntity>
+                {
+                    new TagEntity
+                    {
+                        Type = "Arrow"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Bow"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Ranged"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Quiver"
+                    }
                 },
                 Bids = new List<BidEntity>
                 {
@@ -345,27 +417,47 @@ namespace VareDatabase
             };
             db.Add(Arrow);
 
-            /*ItemEntity Bowset = new ItemEntity();
-            Bowset.Type = "Bowset";
-            Bowset.Description.descriptionOfItem = "Beginner bow set for children";
-            Bowset.Description.imageOfItem = "empty";
-            Bowset.Description.title = "Children bow set - beginner";
-            Bowset.Bid.UserId_forSeller = 2222;
-            Bowset.Bid.UserId_forLastBid = 5555;
-            Bowset.Bid.price = 500;
-            db.Add(Bowset);*/
             ItemEntity Bowset = new ItemEntity()
             {
                 BuyOutPrice = 3000,
                 DateCreated = DateTime.Now,
                 ExpirationDate = new DateTime(2021, 10, 3),
-                Type = "Bowset",
                 Title = "Children bow set - beginner",
                 UserIdSeller = 77,
-                Description = new ImageEntity()
+                DescriptionOfItem = "Contains 5 arrows, a bow and a small quiver",
+                Images = new List<ImageEntity>
                 {
-                    DescriptionOfItem = "Beginner bow set for children",
-                    ImageOfItem = "empty"
+                    new ImageEntity
+                    {
+                        ImageOfItem = "empty"
+                    }
+                },
+                Tags = new List<TagEntity>
+                {
+                    new TagEntity
+                    {
+                        Type = "Bow"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Quiver"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Ranged"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Arrow"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Beginner"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Set"
+                    }
                 },
                 Bids = new List<BidEntity>
                 {
@@ -398,13 +490,42 @@ namespace VareDatabase
                 BuyOutPrice = 3000,
                 DateCreated = new DateTime(1605, 2, 3),
                 ExpirationDate = new DateTime(1605, 5, 12),
-                Type = "Bowset",
                 Title = "Bow set - beginner",
                 UserIdSeller = 77,
-                Description = new ImageEntity()
+                DescriptionOfItem = "Beginner bow set for adults",
+                Images = new List<ImageEntity>
                 {
-                    DescriptionOfItem = "Beginner bow set for adults",
-                    ImageOfItem = "empty"
+                    new ImageEntity
+                    {
+                        ImageOfItem = "empty"
+                    }
+                },
+                Tags = new List<TagEntity>
+                {
+                    new TagEntity
+                    {
+                        Type = "Bow"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Quiver"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Ranged"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Arrow"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Beginner"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Set"
+                    }
                 },
                 Bids = new List<BidEntity>
                 {
@@ -437,13 +558,42 @@ namespace VareDatabase
                 BuyOutPrice = 3000,
                 DateCreated = DateTime.Now,
                 ExpirationDate = new DateTime(2020, 12, 24),
-                Type = "Bowset",
                 Title = "Longbow set - beginner",
                 UserIdSeller = 98,
-                Description = new ImageEntity()
+                DescriptionOfItem = "Beginner long-bow set for adults, in elven style",
+                Images = new List<ImageEntity>
                 {
-                    DescriptionOfItem = "Beginner longbow set for adults",
-                    ImageOfItem = "empty"
+                    new ImageEntity
+                    {
+                        ImageOfItem = "empty"
+                    }
+                },
+                Tags = new List<TagEntity>
+                {
+                    new TagEntity
+                    {
+                        Type = "Long-Bow"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Quiver"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Arrow"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Elven"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Beginner"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Set"
+                    }
                 },
                 Bids = new List<BidEntity>
                 {
@@ -476,13 +626,34 @@ namespace VareDatabase
                 BuyOutPrice = 3000,
                 DateCreated = new DateTime(2007, 5, 3),
                 ExpirationDate = new DateTime(2007, 12, 24),
-                Type = "Warglaive",
-                Title = "Warglive of Azzinoth",
+                Title = "Warglaives of Azzinoth",
                 UserIdSeller = 97,
-                Description = new ImageEntity()
+                DescriptionOfItem = "Drops from BT, and is recreated here in IRL",
+                Images = new List<ImageEntity>
                 {
-                    DescriptionOfItem = "Good for Pvp",
-                    ImageOfItem = "empty"
+                    new ImageEntity
+                    {
+                        ImageOfItem = "empty"
+                    }
+                },
+                Tags = new List<TagEntity>
+                {
+                    new TagEntity
+                    {
+                        Type = "Demon"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Hunter"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Warglaive"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Melee"
+                    }
                 },
                 Bids = new List<BidEntity>
                 {
@@ -516,13 +687,30 @@ namespace VareDatabase
                 BuyOutPrice = 3000,
                 DateCreated = dt,
                 ExpirationDate = dt.AddDays(10),
-                Type = "Sword",
                 Title = "One handed sword - leather handle",
                 UserIdSeller = 22,
-                Description = new ImageEntity()
+                DescriptionOfItem = "One handed sword that is used together with a shield",
+                Images = new List<ImageEntity>
                 {
-                    DescriptionOfItem = "One handed sword that is used together with a shield",
-                    ImageOfItem = "empty"
+                    new ImageEntity
+                    {
+                        ImageOfItem = "empty"
+                    }
+                },
+                Tags = new List<TagEntity>
+                {
+                    new TagEntity
+                    {
+                        Type = "Sword"
+                    },
+                    new TagEntity
+                    {
+                        Type = "One-hand"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Leather-grip"
+                    }
                 },
                 Bids = new List<BidEntity>
                 {
@@ -555,13 +743,30 @@ namespace VareDatabase
                 BuyOutPrice = 3000,
                 DateCreated = DateTime.Now,
                 ExpirationDate = new DateTime(2020, 12, 24),
-                Type = "Sword",
                 Title = "Two handed sword - leather handle",
                 UserIdSeller = 22,
-                Description = new ImageEntity()
+                DescriptionOfItem = "Original Zwei-Hander for RP",
+                Images = new List<ImageEntity>
                 {
-                    DescriptionOfItem = "Two handed sword for combat",
-                    ImageOfItem = "empty"
+                    new ImageEntity
+                    {
+                        ImageOfItem = "empty"
+                    }
+                },
+                Tags = new List<TagEntity>
+                {
+                    new TagEntity
+                    {
+                        Type = "two-handed"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Sword"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Melee"
+                    }
                 },
                 Bids = new List<BidEntity>
                 {
@@ -594,13 +799,34 @@ namespace VareDatabase
                 BuyOutPrice = 2000,
                 DateCreated = DateTime.Now,
                 ExpirationDate = new DateTime(2020, 12, 24),
-                Type = "Shield",
-                Title = "Round one handed shield of tree",
+                Title = "Round one handed shield made of wood",
                 UserIdSeller = 50,
-                Description = new ImageEntity()
+                DescriptionOfItem = "Rounded shield made of wood and edge of metal",
+                Images = new List<ImageEntity>
                 {
-                    DescriptionOfItem = "Round shield for one hand made af tree with edge of metal",
-                    ImageOfItem = "empty"
+                    new ImageEntity
+                    {
+                        ImageOfItem = "empty"
+                    }
+                },
+                Tags = new List<TagEntity>
+                {
+                    new TagEntity
+                    {
+                        Type = "Shield"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Melee"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Wood"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Metal"
+                    }
                 },
                 Bids = new List<BidEntity>
                 {
@@ -632,13 +858,34 @@ namespace VareDatabase
                 BuyOutPrice = 2000,
                 DateCreated = DateTime.Now,
                 ExpirationDate = new DateTime(2020, 12, 24),
-                Type = "Shield",
                 Title = "Round one handed shield of metal",
                 UserIdSeller = 50,
-                Description = new ImageEntity()
+                DescriptionOfItem = "Rounded shield for one hand made of metal, has a crest of an eagle",
+                Images = new List<ImageEntity>
                 {
-                    DescriptionOfItem = "Round shield for one hand made af metal",
-                    ImageOfItem = "empty"
+                    new ImageEntity
+                    {
+                        ImageOfItem = "empty"
+                    }
+                },
+                Tags = new List<TagEntity>
+                {
+                    new TagEntity
+                    {
+                        Type = "Shield"
+                    },
+                    new TagEntity
+                    {
+                        Type = "one-hand"
+                    },
+                    new TagEntity
+                    {
+                        Type = "metal"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Crest"
+                    }
                 },
                 Bids = new List<BidEntity>
                 {
@@ -671,13 +918,30 @@ namespace VareDatabase
                 BuyOutPrice = 2000,
                 DateCreated = DateTime.Now,
                 ExpirationDate = new DateTime(2020, 12, 24),
-                Type = "Shield",
                 Title = "Knight shield of metal",
                 UserIdSeller = 50,
-                Description = new ImageEntity()
+                DescriptionOfItem = "Knight shield made of metal with straps so it can be put on your back",
+                Images = new List<ImageEntity>
                 {
-                    DescriptionOfItem = "Knight shield made of metal with straps so it can be put on your back",
-                    ImageOfItem = "empty"
+                    new ImageEntity
+                    {
+                        ImageOfItem = "empty"
+                    }
+                },
+                Tags = new List<TagEntity>
+                {
+                    new TagEntity
+                    {
+                        Type = "Shield"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Metal"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Straps"
+                    }
                 },
                 Bids = new List<BidEntity>
                 {
@@ -709,7 +973,6 @@ namespace VareDatabase
                 BuyOutPrice = 2000,
                 DateCreated = DateTime.Now,
                 ExpirationDate = new DateTime(2020, 12, 24),
-                Type = "Shield",
                 Title = "Square shield of metal",
                 UserIdSeller = 69,
                 Description = new ImageEntity()
@@ -1439,13 +1702,22 @@ namespace VareDatabase
                 BuyOutPrice = 3000,
                 DateCreated = new DateTime(2020, 5, 18),
                 ExpirationDate = new DateTime(2020, 5, 25),
-                Type = "Accesories",
-                Title = "Elven Bow BUY NOW",
+                Title = "Drinking Horn from a cow",
                 UserIdSeller = 1,
-                Description = new ImageEntity()
+                DescriptionOfItem = "Drops from BT, and is recreated here in IRL",
+                Images = new List<ImageEntity>
                 {
-                    DescriptionOfItem = "Drinking horn of real cow horn. Can hold up to 0,5 liters",
-                    ImageOfItem = "empty"
+                    new ImageEntity
+                    {
+                        ImageOfItem = "empty"
+                    }
+                },
+                Tags = new List<TagEntity>
+                {
+                    new TagEntity
+                    {
+                        Type = "Accessory"
+                    }
                 },
                 Bids = new List<BidEntity>
                 {
@@ -1468,13 +1740,30 @@ namespace VareDatabase
                 BuyOutPrice = 600,
                 DateCreated = new DateTime(2020, 9,20),
                 ExpirationDate = new DateTime(2020, 9, 29),
-                Type = "Accesories",
                 Title = "Elf Ears ",
                 UserIdSeller = 99,
-                Description = new ImageEntity()
+                DescriptionOfItem = "Perfect for creating an elf character in any RP setting",
+                Images = new List<ImageEntity>
                 {
-                    DescriptionOfItem = "These elf ears are gonna turn you into a high elf. YOu will gain the ability of nightvision and be able to speak elvish, and you don't need sleep!",
-                    ImageOfItem = "Coolest elf ears in the world!"
+                    new ImageEntity
+                    {
+                        ImageOfItem = "empty"
+                    }
+                },
+                Tags = new List<TagEntity>
+                {
+                    new TagEntity
+                    {
+                        Type = "Elven"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Accessory"
+                    },
+                    new TagEntity
+                    {
+                        Type = "Ears"
+                    }
                 },
                 Bids = new List<BidEntity>
                 {
