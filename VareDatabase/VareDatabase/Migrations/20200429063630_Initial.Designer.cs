@@ -10,7 +10,7 @@ using VareDatabase.DBContext;
 namespace VareDatabase.Migrations
 {
     [DbContext(typeof(VareDataModelContext))]
-    [Migration("20200428143420_Initial")]
+    [Migration("20200429063630_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,7 +39,7 @@ namespace VareDatabase.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Bid");
+                    b.HasIndex("ItemId");
 
                     b.ToTable("Bids");
                 });
@@ -126,7 +126,7 @@ namespace VareDatabase.Migrations
                 {
                     b.HasOne("VareDatabase.Models.ItemEntity", "Item")
                         .WithMany("Bids")
-                        .HasForeignKey("Bid")
+                        .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

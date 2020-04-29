@@ -37,7 +37,7 @@ namespace VareDatabase.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Bid");
+                    b.HasIndex("ItemId");
 
                     b.ToTable("Bids");
                 });
@@ -124,7 +124,7 @@ namespace VareDatabase.Migrations
                 {
                     b.HasOne("VareDatabase.Models.ItemEntity", "Item")
                         .WithMany("Bids")
-                        .HasForeignKey("Bid")
+                        .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

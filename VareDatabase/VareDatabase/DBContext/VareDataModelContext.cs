@@ -27,10 +27,11 @@ namespace VareDatabase.DBContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
             modelBuilder.Entity<BidEntity>()
                 .HasOne(a => a.Item)
                 .WithMany(b => b.Bids)
-                .HasForeignKey(b => b.Bid);
+                .HasForeignKey(e => e.ItemId);
 
             modelBuilder.Entity<ImageEntity>()
                 .HasOne(a => a.Item)
@@ -42,6 +43,5 @@ namespace VareDatabase.DBContext
                 .WithMany(b => b.Tags)
                 .HasForeignKey(b => b.ItemId);
         }
-
     }
 }

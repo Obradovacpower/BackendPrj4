@@ -40,8 +40,8 @@ namespace VareDatabase.Migrations
                 {
                     table.PrimaryKey("PK_Bids", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Bids_Items_Bid",
-                        column: x => x.Bid,
+                        name: "FK_Bids_Items_ItemId",
+                        column: x => x.ItemId,
                         principalTable: "Items",
                         principalColumn: "ItemId",
                         onDelete: ReferentialAction.Cascade);
@@ -88,9 +88,9 @@ namespace VareDatabase.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bids_Bid",
+                name: "IX_Bids_ItemId",
                 table: "Bids",
-                column: "Bid");
+                column: "ItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Images_ItemId",

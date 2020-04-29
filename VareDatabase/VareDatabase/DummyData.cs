@@ -911,10 +911,7 @@ namespace VareDatabase
 
             string[] tags = { "tower", "square", "metal" };
             string[] images = { "empty" };
-            CreateNewItem(2000, 69, 60, tags, "Square shield of metal",
-                "Square shield made of metal. Good for roman formations", images, db);
-            AddBid(GetItemIdByName("Square shield of metal", db), 460, 1, db);
-            AddBid(GetItemIdByName("Square shield of metal", db), 480, 20, db);
+            
             /*ItemEntity SquareShieldMetal = new ItemEntity()
             {
                 BuyOutPrice = 2000,
