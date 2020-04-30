@@ -78,8 +78,8 @@ namespace VareDatabase.Migrations
 
                     b.Property<string>("DescriptionOfItem")
                         .IsRequired()
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
 
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");

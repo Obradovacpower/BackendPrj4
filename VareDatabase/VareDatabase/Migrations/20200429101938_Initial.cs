@@ -18,7 +18,7 @@ namespace VareDatabase.Migrations
                     ExpirationDate = table.Column<DateTime>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     UserIdSeller = table.Column<int>(nullable: false),
-                    DescriptionOfItem = table.Column<string>(maxLength: 300, nullable: false),
+                    DescriptionOfItem = table.Column<string>(maxLength: 500, nullable: false),
                     Sold = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>

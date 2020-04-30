@@ -23,7 +23,7 @@ namespace VareDatabase.Models
         [Required]
         public int UserIdSeller { get; set; }
         [Required]
-        [MaxLength(300)]
+        [MaxLength(500)]
         public string DescriptionOfItem { get; set; }
         public bool Sold { get; set; } = false;
 

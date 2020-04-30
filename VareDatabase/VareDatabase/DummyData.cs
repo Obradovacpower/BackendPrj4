@@ -48,7 +48,7 @@ namespace VareDatabase
             {
                 foreach(BidEntity b in item.Bids)
                 {
-                    if(b.Bid > bid)
+                    if(b.Bid >= bid)
                     {
                         return;
                     }
@@ -172,6 +172,42 @@ namespace VareDatabase
         {
             ItemEntity item = db.Set<ItemEntity>().First(x => x.Title == name);
             return item.ItemId;
+        }
+        public void Search(string[] search, VareDataModelContext db)
+        {
+            List<ItemEntity> foundItems = new List<ItemEntity>();
+            foreach(string s in search)
+            {
+                List<ItemEntity> ids = new List<ItemEntity>();
+                ids = SearchByType(s, db);
+                foreach (ItemEntity i in ids)
+                {
+                    if(!foundItems.Contains(i))
+                    {
+                        foundItems.Add(i);
+                    }
+                }
+            }
+            
+        }
+        public List<ItemEntity> SearchByType(string tag, VareDataModelContext db)
+        {
+            List<ItemEntity> itemsId = new List<ItemEntity>();
+            var join = (from i in db.Items
+                        join t in db.Tags on i.ItemId equals t.ItemId
+                        select new {
+                            Title = i.Title,
+                            Id = i.ItemId,
+                            Tag = t.Type,
+                        }).Where(x => x.Tag == tag).ToList();
+            foreach(var j in join)
+            {
+                itemsId.AddRange(db.Items.Where(i => j.Id == i.ItemId).ToList());
+                //itemsId.Add(j.Id);
+            }
+            return itemsId;
+            //ids = SearchByType(s, db);
+            //foundItems.AddRange(db.Items.Where(i => ids.Contains(i.ItemId)).ToList());
         }
         public void InsertDummyData(VareDataModelContext db)
         {

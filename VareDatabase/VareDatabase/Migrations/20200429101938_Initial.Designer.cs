@@ -10,7 +10,7 @@ using VareDatabase.DBContext;
 namespace VareDatabase.Migrations
 {
     [DbContext(typeof(VareDataModelContext))]
-    [Migration("20200429063630_Initial")]
+    [Migration("20200429101938_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -80,8 +80,8 @@ namespace VareDatabase.Migrations
 
                     b.Property<string>("DescriptionOfItem")
                         .IsRequired()
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
 
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
