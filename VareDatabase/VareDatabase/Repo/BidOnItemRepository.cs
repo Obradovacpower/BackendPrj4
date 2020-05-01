@@ -11,7 +11,6 @@ namespace VareDatabase.Repo
     {
 
         private VareDataModelContext db;
-
         public BidOnItemRepository(VareDataModelContext db)
         {
             this.db = db;

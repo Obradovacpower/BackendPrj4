@@ -50,6 +50,8 @@ namespace VareDatabase
             ItemEntity item = db.Items.Find(itemId);
             return item;
         }
+
+        //Brugt i: BidOnItemRepository
         public void AddBid(int itemId, int bid, int userId)
         {
             ItemEntity item = db.Set<ItemEntity>().Find(itemId);
