@@ -124,6 +124,8 @@ namespace VareDatabase
                 ImageOfItem = image
             });
         }
+
+        //ERMIN WAS HERE
         public void Search(string[] search)
         {
             List<ItemEntity> foundItems = new List<ItemEntity>();
@@ -141,6 +143,7 @@ namespace VareDatabase
             }
 
         }
+        //ERMIN WAS HERE
         public List<ItemEntity> SearchByTag(string tag)
         {
             List<ItemEntity> itemsId = new List<ItemEntity>();
