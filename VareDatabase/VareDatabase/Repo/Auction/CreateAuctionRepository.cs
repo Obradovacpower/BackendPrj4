@@ -7,13 +7,30 @@ using VareDatabase.Models;
 
 namespace VareDatabase.Repo
 {
-    public class CreateAuctionRepository
+    public class CreateAuctionRepository<TEntity> : IRepository<TEntity> where TEntity : ItemEntity
     {
         private VareDataModelContext db;
         public CreateAuctionRepository(VareDataModelContext db)
         {
             this.db = db;
         }
+        public void Create(TEntity i)
+        {
+            db.Add(i);
+        }
+        public TEntity Read(int id)
+        {
+            return db.Set<TEntity>().Find(id);
+        }
+        public void Update(TEntity i)
+        {
+
+        }
+        public void Delete(TEntity i)
+        {
+
+        }
+        /*
         public void AddItem(int buyOut, int userId, int expire, string[] tags, string title, string description, string[] images)
         {
             List<ImageEntity> newImages = new List<ImageEntity>();
@@ -86,6 +103,6 @@ namespace VareDatabase.Repo
                     Type = newTag,
                 });
             }
-        }
+        }*/
     }
 }

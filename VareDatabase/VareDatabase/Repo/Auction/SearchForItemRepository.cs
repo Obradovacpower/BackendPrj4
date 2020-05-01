@@ -7,11 +7,11 @@ using VareDatabase.Models;
 
 namespace VareDatabase.Repo
 {
-    public class SeachForItemRepository: IItemRepository
+    public class SearchForItemRepository
     {
         private VareDataModelContext db;
 
-        public SeachForItemRepository(VareDataModelContext db)
+        public SearchForItemRepository(VareDataModelContext db)
         {
             this.db = db;
         }

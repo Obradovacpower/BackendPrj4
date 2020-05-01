@@ -63,8 +63,27 @@ namespace VareDatabase.Repo
             itemToDelete.Sold = true;
             db.SaveChanges();
         }
-        //UpdateItem maybe?
-        public ItemEntity UpdateItem(int itemId) //getItem?
+        //remove tag
+        public void RemoveTag(int itemId, string tagToRemove)
+        {
+            //find item, then find if tag exist
+            //then delete the desired tag
+            ItemEntity item = db.Set<ItemEntity>().ToList().First(x => (x.ItemId == itemId));
+            if (item != null && item.Tags.Count > 1)
+            {
+                foreach (TagEntity tag in item.Tags)
+                {
+                    if (tag.Type == tagToRemove)
+                    {
+                        item.Tags.Remove(tag);
+                        break;
+                    }
+                }
+            }
+
+        }
+        //UpdateItem
+        public ItemEntity GetItem(int itemId)
         {
             ItemEntity item = db.Items.Find(itemId);
             return item;

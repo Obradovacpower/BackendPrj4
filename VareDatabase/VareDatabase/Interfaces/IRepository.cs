@@ -6,13 +6,11 @@ using VareDatabase.Models;
 
 namespace VareDatabase
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<TEntity> where TEntity : class
     {
-        IEnumerable<T> GetEntities();
-        T GetById(int id);
-        void Add(T entity);
-        void Delete(T entity);
-        //void Update(T entity); maybe?
-        //void Save(); maybe?
+        void Create(TEntity entity);
+        TEntity Read(int id);
+        void Update(TEntity entity);
+        void Delete(TEntity entity);
     }
 }
