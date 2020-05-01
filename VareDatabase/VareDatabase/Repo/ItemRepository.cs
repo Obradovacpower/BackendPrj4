@@ -14,6 +14,7 @@ namespace VareDatabase
         {
             db = context;
         }
+        //used 1
         public void AddItem(int buyOut, int userId, int expire, string[] tags, string title, string description, string[] images)
         {
             List<ImageEntity> newImages = new List<ImageEntity>();

@@ -7,19 +7,14 @@ using VareDatabase.Models;
 
 namespace VareDatabase.Repo
 {
-    public class CreateUserRepository
+    public class CreateWalletRepository
     {
         private VareDataModelContext db;
-        public CreateUserRepository(VareDataModelContext db)
+        public CreateWalletRepository(VareDataModelContext db)
         {
             this.db = db;
         }
-        public void AddUser()
-        {
-
-        }
-        //maybe?
-        public void RemoveUser()
+        public void temp()
         {
 
         }

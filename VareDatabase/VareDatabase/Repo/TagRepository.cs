@@ -13,6 +13,7 @@ namespace VareDatabase.Repo
         {
 
         }
+        //used 1
         public void AddTag(int itemId, string newTag)
         {
             ItemEntity item = db.Set<ItemEntity>().ToList().First(x => x.ItemId == itemId);
@@ -36,6 +37,7 @@ namespace VareDatabase.Repo
                 });
             }
         }
+        //used 1
         private void GenerateTags(string nameOfItem, int itemId)
         {
             string[] words = nameOfItem.Split(' ', ',', '.');
@@ -44,6 +46,7 @@ namespace VareDatabase.Repo
                 AddTag(itemId, s);
             }
         }
+        //used 0
         public void RemoveTag(int itemId, string tagToRemove)
         {
             //find item, then find if tag exist
