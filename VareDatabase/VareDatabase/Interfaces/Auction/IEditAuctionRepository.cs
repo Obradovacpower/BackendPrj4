@@ -8,11 +8,11 @@ namespace VareDatabase.Interfaces.Auction
 {
     interface IEditAuctionRepository : IRepository<ItemEntity>
     {
-        ItemEntity DeleteImage(int itemId, int imageId);
-        ItemEntity EditItem(int itemId, int expire, int buyOut, string description);
-        ItemEntity SoftDeleteItem(int itemId);
-        ItemEntity RemoveTag(int itemId, string tagToRemove);
-        ItemEntity GetItem(int itenId);
+        public void DeleteImage(int itemId, int imageId);
+        public void EditItem(int itemId, int expire, int buyOut, string description);
+        public void SoftDeleteItem(int itemId);
+        public void RemoveTag(int itemId, string tagToRemove);
+        public ItemEntity GetItem(int itemId);
 
     }
 }
