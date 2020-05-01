@@ -13,14 +13,12 @@ namespace VareDatabase.Models
             using (var context = new VareDataModelContext())
             {
                 context.Database.EnsureCreated();
-                DummyData dd = new DummyData();
-                string[] s = { "shield", "Melee" };
                 //Dummiedata.
                 if (context.Items.Any())
                 {
-                    dd.Search(s, context);
                     return;   // DB has been seeded
                 }
+                DummyData dd = new DummyData();
                 dd.InsertDummyData(context);
                 context.SaveChanges();
             }
