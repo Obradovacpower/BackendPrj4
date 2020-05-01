@@ -51,6 +51,8 @@ namespace VareDatabase
             ItemEntity item = db.Items.Find(itemId);
             return item;
         }
+
+        //Brugt i: BidOnItemRepository
         public void AddBid(int itemId, int bid, int userId)
         {
             ItemEntity item = db.Set<ItemEntity>().Find(itemId);
@@ -125,6 +127,8 @@ namespace VareDatabase
                 ImageOfItem = image
             });
         }
+
+        //ERMIN WAS HERE
         public void Search(string[] search)
         {
             List<ItemEntity> foundItems = new List<ItemEntity>();
@@ -142,6 +146,7 @@ namespace VareDatabase
             }
 
         }
+        //ERMIN WAS HERE
         public List<ItemEntity> SearchByTag(string tag)
         {
             List<ItemEntity> itemsId = new List<ItemEntity>();
