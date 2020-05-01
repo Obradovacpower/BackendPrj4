@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using VareDatabase.DBContext;
 using VareDatabase.Models;
+using VareDatabase.Interfaces.Auction;
 
 namespace VareDatabase.Repo
 {
-    public class BidOnItemRepository
+    public class BidOnItemRepository : Repository<BidEntity>, IBidOnItemRepository
     {
 
         private VareDataModelContext db;
