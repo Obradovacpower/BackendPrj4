@@ -6,7 +6,7 @@ using VareDatabase.Models;
 
 namespace VareDatabase.Interfaces.Auction
 {
-    interface IEditAuctionRepository : IRepository<ItemEntity>
+    public interface IEditAuctionRepository : IRepository<ItemEntity>
     {
         public void DeleteImage(int itemId, int imageId);
         public void EditItem(int itemId, int expire, int buyOut, string description);
