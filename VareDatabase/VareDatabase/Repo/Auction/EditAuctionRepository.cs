@@ -7,10 +7,10 @@ using VareDatabase.Models;
 
 namespace VareDatabase.Repo
 {
-    public class EditAuctionReposiory
+    public class EditAuctionRepository
     {
         private VareDataModelContext db;
-        public EditAuctionReposiory(VareDataModelContext db)
+        public EditAuctionRepository(VareDataModelContext db)
         {
             this.db = db;
         }
