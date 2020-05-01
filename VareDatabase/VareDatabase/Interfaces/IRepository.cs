@@ -10,7 +10,6 @@ namespace VareDatabase
     {
         void Create(TEntity entity);
         TEntity Read(int id);
-        void Update(TEntity entity);
         void Delete(TEntity entity);
     }
 }

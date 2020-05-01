@@ -9,7 +9,7 @@ using VareDatabase.Models;
 
 namespace VareDatabase.Interfaces.Auction
 {
-    interface IBidOnItemRepository : IRepository<BidEntity>
+    public interface IBidOnItemRepository : IRepository<BidEntity>
     {
         void AddBid(int itemId, int bid, int user);
     }

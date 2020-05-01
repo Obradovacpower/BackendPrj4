@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VareDatabase.Interfaces;
+using VareDatabase.Repo;
 
 namespace VareDatabase
 {
@@ -16,8 +17,11 @@ namespace VareDatabase
         }
         public void AddItem(/*json string*/) //json as param?
         {
+            using (var unit = new AuctionUnitOfWork(new DBContext.VareDataModelContext()))
+            {
+                unit.Auctions.
+            }
             //ItemEntity i = ReadJson();
-            //uow.GetRepository<ItemEntity>().Create(i);
             uow.Commit();
         }
         public int GetUserId()

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using VareDatabase.Interfaces;
 using VareDatabase.DBContext;
 using Microsoft.EntityFrameworkCore;
+using VareDatabase.Interfaces.Auction;
 
 namespace VareDatabase.Repo
 {
@@ -14,15 +15,16 @@ namespace VareDatabase.Repo
         public AuctionUnitOfWork(VareDataModelContext context)
         {
             Context = context;
-            //Bids = new BidOnItemRepository(Context); //example
+            Bids = new BidOnItemRepository((VareDataModelContext)Context); //example
+            Auctions = new CreateAuctionRepository((VareDataModelContext)Context);
+            Edits = new EditAuctionRepository((VareDataModelContext)Context);
+            Searches = new SearchAuctionRepository((VareDataModelContext)Context);
         }
         //interfaces for all repositories that are relevant for auctions
-        /*
-         * public IBidOnItemRepository Bids { get; private set; } //example
-         * CreateAuction
-         * EditAuction
-         * SearchForItem
-         */
+        public IBidOnItemRepository Bids { get; private set; } //example
+        public ICreateAuctionRepository Auctions { get; private set; }
+        public IEditAuctionRepository Edits { get; private set; }
+        public ISearchAuctionRepository Searches { get; private set; }
         public void Commit()
         {
             Context.SaveChanges();

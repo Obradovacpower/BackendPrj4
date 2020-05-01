@@ -16,7 +16,6 @@ namespace VareDatabase.Repo
         {
             this.db = db;
         }
-
         public void AddBid(int itemId, int bid, int userId)
         {
             ItemEntity item = db.Set<ItemEntity>().Find(itemId);
