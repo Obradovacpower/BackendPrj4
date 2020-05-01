@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.EntityFrameworkCore;
 using VareDatabase.DBContext;
 using VareDatabase.Models;
@@ -27,6 +28,7 @@ namespace VareDatabase.Controllers
         {
             return await _context.Items.ToListAsync();
         }
+        
 
         // GET: api/ItemEntities/5
         [HttpGet("{id}")]
