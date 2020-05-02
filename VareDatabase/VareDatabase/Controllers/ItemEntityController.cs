@@ -13,20 +13,21 @@ namespace VareDatabase.Controllers
     [ApiController]
     public class ItemEntityController
     {
-        private IUnitOfWork _unitOfWork;
+        private AuctionUnitOfWork _unitOfWork;
 
-        public ItemEntityController(IUnitOfWork unitOfWork)
+        public ItemEntityController(AuctionUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
-        public IActionResult GetAllItem()
+        public IActionResult GetAllItems()
         {
             List<ItemEntity> items = new List<ItemEntity>();
             try
             {
-                items = _unitOfWork.
+                items = _unitOfWork.;
+                items = _unitOfWork.Auctions.Read(20);
             }
             catch (Exception e)
             {

@@ -10,6 +10,8 @@ namespace VareDatabase
     {
         void Create(TEntity entity);
         TEntity Read(int id);
+        IEnumerable<TEntity> GetAll();
         void Delete(TEntity entity);
+        IEnumerable<TEntity> Search(string searchString);
     }
 }

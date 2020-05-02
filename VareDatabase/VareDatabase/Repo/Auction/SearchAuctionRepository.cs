@@ -17,8 +17,9 @@ namespace VareDatabase.Repo
             this.db = db;
         }
 
-        public void search(string[] search)
+        public void search(string title)
         {
+            string[] search = title.Split(' ', ',', '.');
             List<ItemEntity> foundItems = new List<ItemEntity>();
             foreach (string s in search)
             {

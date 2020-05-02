@@ -4,30 +4,48 @@ using System.Linq;
 using System.Threading.Tasks;
 using VareDatabase.Interfaces;
 using VareDatabase.Repo;
+using VareDatabase.Repo.Auction;
+using VareDatabase.Models;
 
 namespace VareDatabase
 {
     public class DatabaseLogic
     {
-        private readonly IUnitOfWork uow;
+        private readonly IUnitOfWork unit;
+        private readonly IItemRepository repo;
         //private ILoginRepository _loginRepo; //does not exist atm
-        public DatabaseLogic(IUnitOfWork unit)
+        public DatabaseLogic(IUnitOfWork unit, IItemRepository repo)
         {
-            uow = unit;
+            this.unit = unit;
+            this.repo = repo;
         }
-        public void AddItem(/*json string*/) //json as param?
+        public void AddItem(ItemEntity item) //json as param?
         {
-            using (var unit = new AuctionUnitOfWork(new DBContext.VareDataModelContext()))
-            {
-                unit.Auctions.AddItem()
-            }
-            //ItemEntity i = ReadJson();
-            uow.Commit();
+            repo.Create(item);
+            unit.Commit();
         }
-        public int GetUserId()
+        public void Delete(ItemEntity item)
         {
-            //return _loginRepo.GetUserId();
-            return 14; //temp
+            repo.Delete(item);
+        }
+
+        public IEnumerable<ItemEntity> GetAll()
+        {
+            return repo.GetAll();
+        }
+
+        public ItemEntity GetSingle(int id)
+        {
+            return repo.Read(id);
+        }
+        public void Save()
+        {
+            unit.Commit(); 
+        }
+
+        public IEnumerable<ItemEntity> Search(string searchingstring, string orderbyname, bool asc)
+        {
+            return repo.Search(searchingstring);
         }
     }
 }

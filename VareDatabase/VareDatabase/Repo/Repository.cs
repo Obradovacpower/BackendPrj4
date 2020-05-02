@@ -18,6 +18,10 @@ namespace VareDatabase.Repo
         {
             return Context.Set<TEntity>().Find(id);
         }
+        public IEnumerable<TEntity> GetAll()
+        {
+            return Context.Set<TEntity>().ToList();
+        }
         public void Create(TEntity entity)
         {
             Context.Set<TEntity>().Add(entity);
@@ -26,5 +30,6 @@ namespace VareDatabase.Repo
         {
             Context.Set<TEntity>().Remove(entity);
         }
+        public virtual IEnumerable<TEntity> Search(string searchString);
     }
 }
