@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Http;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using VareDatabase.Repo;
 using VareDatabase.Interfaces;
@@ -12,7 +13,7 @@ using VareDatabase.Repo.Auction;
 namespace VareDatabase.Controllers
 {
     [Route("api/[controller]")]
-    public class ItemEntityController : ApiController
+    public class ItemEntityController : ControllerBase
     {
         private DatabaseLogic _dbLogic;
         private string json;
@@ -29,10 +30,10 @@ namespace VareDatabase.Controllers
         [HttpGet]
         //Get on ID
         [Route("item/{id:int}")]
-        public string GetItem(int id)
+        public ActionResult<ItemEntity> GetItem(int id)
         {
             json = JsonConvert.SerializeObject(_dbLogic.GetSingle(id), Formatting.Indented);
-            return json;
+            return _dbLogic.GetSingle(id);
         }
 
         [Route("item")]
