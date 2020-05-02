@@ -12,8 +12,8 @@ using VareDatabase.Repo.Auction;
 
 namespace VareDatabase.Controllers
 {
-    [Route("api/[controller]")]
-    public class ItemEntityController : ControllerBase
+    //[Route("api/[controller]")]
+    public class ItemEntityController : Controller
     {
         private DatabaseLogic _dbLogic;
         private string json;
@@ -28,17 +28,18 @@ namespace VareDatabase.Controllers
         }
 
         [HttpGet]
+        [Route("Home")]
+        [Route("Home/item")]
+        [Route("Home/item/{id?}")]
         //Get on ID
-        [Route("item/{id:int}")]
-        public ActionResult<ItemEntity> GetItem(int id)
+        public ActionResult<string> GetItem(int id)
         {
             json = JsonConvert.SerializeObject(_dbLogic.GetSingle(id), Formatting.Indented);
-            return _dbLogic.GetSingle(id);
+            return json;
         }
-
-        [Route("item")]
         [HttpGet]
-        public string GetAllItems()
+        [Route("")]
+        public ActionResult<string> GetAllItems()
         {
             json = JsonConvert.SerializeObject(_dbLogic.GetAll(), Formatting.Indented);
             return json;
