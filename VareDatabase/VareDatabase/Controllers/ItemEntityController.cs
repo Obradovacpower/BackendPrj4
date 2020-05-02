@@ -2,48 +2,50 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+using System.Web.Http;
 using VareDatabase.Repo;
 using VareDatabase.Interfaces;
 using VareDatabase.Models;
 
 namespace VareDatabase.Controllers
 {
-    [Route("api/item")]
-    [ApiController]
-    public class ItemEntityController
+    [RoutePrefix("item")]
+    public class ItemEntityController : ApiController
     {
-        private AuctionUnitOfWork _unitOfWork;
+        private DatabaseLogic _dbLogic;
 
-        public ItemEntityController(AuctionUnitOfWork unitOfWork)
+        public ItemEntityController(DatabaseLogic dbLogic)
         {
-            _unitOfWork = unitOfWork;
+            _dbLogic = dbLogic;
         }
 
         [HttpGet]
         //Get on ID
-        [Route("item/{id}")]
-        public IActionResult GetSpecificItem(int id)
-        { 
-            IEnumerable<ItemEntity> item = _unitOfWork.Edits.GetItem(id);
+        [Route("item/{id:int}")]
+        public ItemEntity GetItem(int id)
+        {
+            return _dbLogic.GetSingle(id);
         }
 
+        [Route("item")]
         [HttpGet]
-        //Get All
-        public List<ItemEntity> GetAllEntities() { }
+        public IEnumerable<ItemEntity> GetAllItems()
+        {
+            return _dbLogic.GetAll();
+        }
 
         [HttpPost]
         //Post = Create
-        public ItemEntity CreateEntity(ItemEntity item)
+        public void CreateEntity(ItemEntity item)
         {
-            //create
+            _dbLogic.AddItem(item);
         }
 
         [HttpPut]
         //Update eller replace
         public ItemEntity EditItemEntity(int id, ItemEntity item)
         {
-            //Ændrer bestemt item
+            _dbLogic.
         }
 
         [HttpDelete]
