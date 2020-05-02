@@ -14,8 +14,6 @@ namespace VareDatabase.Interfaces.Auction
 
         void AddImage(int itemId, string image);
 
-        void GenerateTags(string nameOfItem, int itemId);
-
         void AddTag(int itemId, string newTag);
 
     }

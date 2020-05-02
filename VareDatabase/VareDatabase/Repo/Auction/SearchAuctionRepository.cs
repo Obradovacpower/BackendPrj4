@@ -4,14 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using VareDatabase.DBContext;
 using VareDatabase.Models;
+using VareDatabase.Interfaces.Auction;
 
 namespace VareDatabase.Repo
 {
-    public class SearchForItemRepository
+    public class SearchAuctionRepository : Repository<ItemEntity>, ISearchAuctionRepository
     {
         private VareDataModelContext db;
 
-        public SearchForItemRepository(VareDataModelContext db)
+        public SearchAuctionRepository(VareDataModelContext db) : base(db)
         {
             this.db = db;
         }

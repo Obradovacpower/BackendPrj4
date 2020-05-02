@@ -4,13 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using VareDatabase.DBContext;
 using VareDatabase.Models;
+using VareDatabase.Interfaces.Auction;
 
 namespace VareDatabase.Repo
 {
-    public class EditAuctionRepository
+    public class EditAuctionRepository : Repository<ItemEntity>, IEditAuctionRepository
     {
         private VareDataModelContext db;
-        public EditAuctionRepository(VareDataModelContext db)
+        public EditAuctionRepository(VareDataModelContext db) : base(db)
         {
             this.db = db;
         }

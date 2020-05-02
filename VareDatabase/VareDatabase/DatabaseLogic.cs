@@ -19,7 +19,7 @@ namespace VareDatabase
         {
             using (var unit = new AuctionUnitOfWork(new DBContext.VareDataModelContext()))
             {
-                unit.Auctions.
+                unit.Auctions.AddItem()
             }
             //ItemEntity i = ReadJson();
             uow.Commit();

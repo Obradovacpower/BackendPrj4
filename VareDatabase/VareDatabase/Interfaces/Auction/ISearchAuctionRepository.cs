@@ -6,7 +6,7 @@ using VareDatabase.Models;
 
 namespace VareDatabase.Interfaces.Auction
 {
-    public interface ISearchForItemRepository : IRepository<ItemEntity>
+    public interface ISearchAuctionRepository : IRepository<ItemEntity>
     {
         public void search(string[] search);
         public List<ItemEntity> SearchByTag(string tag);
