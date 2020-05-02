@@ -9,12 +9,6 @@ namespace VareDatabase.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
-        DbContext Context { get; }
-
-        IBidOnItemRepository Bids();
-        ICreateAuctionRepository Auctions();
-        IEditAuctionRepository Edits();
-        ISearchAuctionRepository Searches();
         void Commit();
         //IRepository GetRepository();
     }

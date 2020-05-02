@@ -11,14 +11,14 @@ namespace VareDatabase.Repo
 {
     public class AuctionUnitOfWork : IUnitOfWork
     {
-        public DbContext Context { get; protected set; }
+        public VareDataModelContext Context { get; protected set; }
         public AuctionUnitOfWork(VareDataModelContext context)
         {
             Context = context;
-            Bids = new BidOnItemRepository((VareDataModelContext)Context); //example
-            Auctions = new CreateAuctionRepository((VareDataModelContext)Context);
-            Edits = new EditAuctionRepository((VareDataModelContext)Context);
-            Searches = new SearchAuctionRepository((VareDataModelContext)Context);
+            Bids = new BidOnItemRepository(Context); //example
+            Auctions = new CreateAuctionRepository(Context);
+            Edits = new EditAuctionRepository(Context);
+            Searches = new SearchAuctionRepository(Context);
         }
         //interfaces for all repositories that are relevant for auctions
         public IBidOnItemRepository Bids { get; private set; } //example
