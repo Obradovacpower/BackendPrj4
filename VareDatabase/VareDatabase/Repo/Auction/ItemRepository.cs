@@ -18,7 +18,7 @@ namespace VareDatabase.Repo.Auction
         {
             this.db = db;
         }
-        public void search(string title)
+        public IEnumerable<ItemEntity> Search(string title)
         {
             string[] search = title.Split(' ', ',', '.');
             List<ItemEntity> foundItems = new List<ItemEntity>();
@@ -34,6 +34,7 @@ namespace VareDatabase.Repo.Auction
                     }
                 }
             }
+            return foundItems;
         }
 
         public List<ItemEntity> SearchByTag(string tag)

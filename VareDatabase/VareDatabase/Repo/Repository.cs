@@ -31,9 +31,5 @@ namespace VareDatabase.Repo
         {
             Context.Set<TEntity>().Remove(entity);
         }
-        public IEnumerable<TEntity> Search(string searchString)
-        {
-
-        }
     }
 }
