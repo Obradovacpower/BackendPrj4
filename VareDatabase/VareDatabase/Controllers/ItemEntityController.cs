@@ -11,7 +11,7 @@ using VareDatabase.Repo.Auction;
 
 namespace VareDatabase.Controllers
 {
-    [RoutePrefix("item")]
+    [Route("api/[controller]")]
     public class ItemEntityController : ApiController
     {
         private DatabaseLogic _dbLogic;

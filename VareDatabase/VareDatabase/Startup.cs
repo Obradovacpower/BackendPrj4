@@ -53,7 +53,7 @@ namespace VareDatabase
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=ItemController}/{action=Index}/{id?}");
+                    pattern: "{controller=ItemEntityController}/{action=Index}/{id?}");
             });
         }
     }
