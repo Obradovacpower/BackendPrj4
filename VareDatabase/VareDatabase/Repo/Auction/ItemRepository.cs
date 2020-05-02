@@ -4,15 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using VareDatabase.Models;
 using VareDatabase.DBContext;
+using VareDatabase.Interfaces;
 
 namespace VareDatabase.Repo.Auction
 {
-    public interface IItemRepository : IRepository<ItemEntity>
-    {
-        IEnumerable<ItemEntity> Search(string searchString);
-        void GenerateTags(ItemEntity item);
-        void AddTag(int id, string newTag);
-    }
     public class ItemRepository : Repository<ItemEntity>, IItemRepository
     {
         private VareDataModelContext db;

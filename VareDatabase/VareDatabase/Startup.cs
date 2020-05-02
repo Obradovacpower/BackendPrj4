@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using VareDatabase.DBContext;
 using Newtonsoft.Json;
+using VareDatabase.Repo;
 
 
 namespace VareDatabase
@@ -31,7 +32,7 @@ namespace VareDatabase
         {
             services.AddDbContext<VareDataModelContext>();
             services.AddScoped<VareDataModelContext>();
-            services.AddScoped(typeof(IRepository<>), typeof(IRepository<>));
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddControllers();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

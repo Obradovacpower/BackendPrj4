@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using VareDatabase.Repo;
 using VareDatabase.Interfaces;
 using VareDatabase.Models;
+using VareDatabase.Repo.Auction;
 
 namespace VareDatabase.Controllers
 {
@@ -16,8 +17,12 @@ namespace VareDatabase.Controllers
         private DatabaseLogic _dbLogic;
         private string json;
 
-        public ItemEntityController(DatabaseLogic dbLogic)
+        public ItemEntityController(/*DatabaseLogic dbLogic*/)
         {
+            var db = new DBContext.VareDataModelContext();
+            IItemRepository repo = new ItemRepository(db);
+            var unit = new AuctionUnitOfWork(db);
+            var dbLogic = new DatabaseLogic(unit, repo);
             _dbLogic = dbLogic;
         }
 
