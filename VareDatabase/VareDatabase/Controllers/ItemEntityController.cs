@@ -2,54 +2,62 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+using System.Web.Http;
+using Newtonsoft.Json;
 using VareDatabase.Repo;
 using VareDatabase.Interfaces;
 using VareDatabase.Models;
 
 namespace VareDatabase.Controllers
 {
-    [Route("api/item")]
-    [ApiController]
-    public class ItemEntityController
+    [RoutePrefix("item")]
+    public class ItemEntityController : ApiController
     {
-        private AuctionUnitOfWork _unitOfWork;
+        private DatabaseLogic _dbLogic;
+        private string json;
 
-        public ItemEntityController(AuctionUnitOfWork unitOfWork)
+        public ItemEntityController(DatabaseLogic dbLogic)
         {
-            _unitOfWork = unitOfWork;
+            _dbLogic = dbLogic;
         }
 
         [HttpGet]
         //Get on ID
-        [Route("item/{id}")]
-        public IActionResult GetSpecificItem(int id)
-        { 
-            IEnumerable<ItemEntity> item = _unitOfWork.Edits.GetItem(id);
+        [Route("item/{id:int}")]
+        public string GetItem(int id)
+        {
+            json = JsonConvert.SerializeObject(_dbLogic.GetSingle(id), Formatting.Indented);
+            return json;
         }
 
+        [Route("item")]
         [HttpGet]
-        //Get All
-        public List<ItemEntity> GetAllEntities() { }
+        public string GetAllItems()
+        {
+            json = JsonConvert.SerializeObject(_dbLogic.GetAll(), Formatting.Indented);
+            return json;
+        }
 
         [HttpPost]
         //Post = Create
-        public ItemEntity CreateEntity(ItemEntity item)
+        public void CreateEntity(ItemEntity item)
         {
-            //create
+            _dbLogic.AddItem(item);
+            _dbLogic.Save();
         }
 
         [HttpPut]
         //Update eller replace
-        public ItemEntity EditItemEntity(int id, ItemEntity item)
+        public void EditItemEntity(int id, ItemEntity item)
         {
-            //Ændrer bestemt item
+            //En eller anden update func MANGLER HER
+            _dbLogic.Save();
         }
 
         [HttpDelete]
-        public ItemEntity deleteItem(int id)
-        {
-            //delete
+        public void DeleteItem(ItemEntity item)
+        { 
+            _dbLogic.Delete(item);
         }
     }
 }
