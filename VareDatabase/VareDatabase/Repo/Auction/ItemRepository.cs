@@ -9,6 +9,7 @@ namespace VareDatabase.Repo.Auction
 {
     public interface IItemRepository : IRepository<ItemEntity>
     {
+        public IEnumerable<ItemEntity> Search(string searchString);
     }
     public class ItemRepository : Repository<ItemEntity>, IItemRepository
     {
