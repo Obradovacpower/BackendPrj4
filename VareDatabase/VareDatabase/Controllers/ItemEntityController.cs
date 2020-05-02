@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Newtonsoft.Json;
 using VareDatabase.Repo;
 using VareDatabase.Interfaces;
 using VareDatabase.Models;
@@ -13,6 +14,7 @@ namespace VareDatabase.Controllers
     public class ItemEntityController : ApiController
     {
         private DatabaseLogic _dbLogic;
+        private string json;
 
         public ItemEntityController(DatabaseLogic dbLogic)
         {
@@ -22,16 +24,18 @@ namespace VareDatabase.Controllers
         [HttpGet]
         //Get on ID
         [Route("item/{id:int}")]
-        public ItemEntity GetItem(int id)
+        public string GetItem(int id)
         {
-            return _dbLogic.GetSingle(id);
+            json = JsonConvert.SerializeObject(_dbLogic.GetSingle(id), Formatting.Indented);
+            return json;
         }
 
         [Route("item")]
         [HttpGet]
-        public IEnumerable<ItemEntity> GetAllItems()
+        public string GetAllItems()
         {
-            return _dbLogic.GetAll();
+            json = JsonConvert.SerializeObject(_dbLogic.GetAll(), Formatting.Indented);
+            return json;
         }
 
         [HttpPost]
@@ -39,19 +43,21 @@ namespace VareDatabase.Controllers
         public void CreateEntity(ItemEntity item)
         {
             _dbLogic.AddItem(item);
+            _dbLogic.Save();
         }
 
         [HttpPut]
         //Update eller replace
-        public ItemEntity EditItemEntity(int id, ItemEntity item)
+        public void EditItemEntity(int id, ItemEntity item)
         {
-            _dbLogic.
+            //En eller anden update func MANGLER HER
+            _dbLogic.Save();
         }
 
         [HttpDelete]
-        public ItemEntity deleteItem(int id)
-        {
-            //delete
+        public void DeleteItem(ItemEntity item)
+        { 
+            _dbLogic.Delete(item);
         }
     }
 }

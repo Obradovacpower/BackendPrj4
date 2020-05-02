@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using VareDatabase.Models;
 
 namespace VareDatabase.Repo
 {
@@ -30,6 +31,7 @@ namespace VareDatabase.Repo
         {
             Context.Set<TEntity>().Remove(entity);
         }
-        public virtual IEnumerable<TEntity> Search(string searchString);
+
+        public virtual IEnumerable<TEntity> Search(string searchString)
     }
 }
