@@ -13,26 +13,43 @@ namespace VareDatabase.Controllers
     [ApiController]
     public class ItemEntityController
     {
-        private IUnitOfWork _unitOfWork;
+        private AuctionUnitOfWork _unitOfWork;
 
-        public ItemEntityController(IUnitOfWork unitOfWork)
+        public ItemEntityController(AuctionUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
-        public IActionResult GetAllItem()
+        //Get on ID
+        [Route("item/{id}")]
+        public IActionResult GetSpecificItem(int id)
+        { 
+            IEnumerable<ItemEntity> item = _unitOfWork.Edits.GetItem(id);
+        }
+
+        [HttpGet]
+        //Get All
+        public List<ItemEntity> GetAllEntities() { }
+
+        [HttpPost]
+        //Post = Create
+        public ItemEntity CreateEntity(ItemEntity item)
         {
-            List<ItemEntity> items = new List<ItemEntity>();
-            try
-            {
-                items = _unitOfWork.
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            //create
+        }
+
+        [HttpPut]
+        //Update eller replace
+        public ItemEntity EditItemEntity(int id, ItemEntity item)
+        {
+            //Ændrer bestemt item
+        }
+
+        [HttpDelete]
+        public ItemEntity deleteItem(int id)
+        {
+            //delete
         }
     }
 }
