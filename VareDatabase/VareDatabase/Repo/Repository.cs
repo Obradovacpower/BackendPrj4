@@ -23,11 +23,11 @@ namespace VareDatabase.Repo
         {
             return Context.Set<TEntity>().ToList();
         }
-        public void Create(TEntity entity)
+        public virtual void Create(TEntity entity)
         {
             Context.Set<TEntity>().Add(entity);
         }
-        public void Delete(TEntity entity)
+        public virtual void Delete(TEntity entity)
         {
             Context.Set<TEntity>().Remove(entity);
         }

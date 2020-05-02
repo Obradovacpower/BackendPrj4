@@ -9,7 +9,9 @@ namespace VareDatabase.Repo.Auction
 {
     public interface IItemRepository : IRepository<ItemEntity>
     {
-        public IEnumerable<ItemEntity> Search(string searchString);
+        IEnumerable<ItemEntity> Search(string searchString);
+        void GenerateTags(ItemEntity item);
+        void AddTag(int id, string newTag);
     }
     public class ItemRepository : Repository<ItemEntity>, IItemRepository
     {
@@ -17,6 +19,46 @@ namespace VareDatabase.Repo.Auction
         public ItemRepository(VareDataModelContext db) : base(db)
         {
             this.db = db;
+        }
+        public void GenerateTags(ItemEntity item)
+        {
+            string[] words = item.Title.Split(' ', ',', '.');
+            foreach (string s in words)
+            {
+                if (s != null)
+                {
+                    AddTag(item.ItemId, s);
+                }
+            }
+        }
+        public void AddTag(int itemId, string newTag)
+        {
+            ItemEntity item = db.Set<ItemEntity>().ToList().First(x => x.ItemId == itemId);
+            if (item == null)
+            {
+                return;
+            }
+            bool exists = false;
+            foreach (TagEntity t in item.Tags) //check each tag if it exists
+            {
+                if (t.Type == newTag)
+                {
+                    exists = true;
+                }
+            }
+            if (!exists) //if it doesnt exist add it
+            {
+                item.Tags.Add(new TagEntity()
+                {
+                    Type = newTag,
+                });
+            }
+        }
+        public override void Delete(ItemEntity i)
+        {
+            var items = db.Set<ItemEntity>().ToList();
+            ItemEntity itemToDelete = items.First(x => x.ItemId == i.ItemId);
+            itemToDelete.Sold = true;
         }
         public IEnumerable<ItemEntity> Search(string title)
         {
@@ -36,8 +78,7 @@ namespace VareDatabase.Repo.Auction
             }
             return foundItems;
         }
-
-        public List<ItemEntity> SearchByTag(string tag)
+        private List<ItemEntity> SearchByTag(string tag)
         {
             List<ItemEntity> itemsId = new List<ItemEntity>();
             var join = (from i in db.Items

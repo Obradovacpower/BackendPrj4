@@ -19,9 +19,10 @@ namespace VareDatabase
             this.unit = unit;
             this.repo = repo;
         }
-        public void AddItem(ItemEntity item) //json as param?
+        public void AddItem(ItemEntity item)
         {
             repo.Create(item);
+            repo.GenerateTags(item);
             unit.Commit();
         }
         public void Delete(ItemEntity item)
@@ -33,7 +34,6 @@ namespace VareDatabase
         {
             return repo.GetAll();
         }
-
         public ItemEntity GetSingle(int id)
         {
             return repo.Read(id);
@@ -42,7 +42,10 @@ namespace VareDatabase
         {
             unit.Commit(); 
         }
-
+        public void AddTag(int id, string newTag)
+        {
+            repo.AddTag(id, newTag);
+        }
         public IEnumerable<ItemEntity> Search(string searchingstring, string orderbyname, bool asc)
         {
             return repo.Search(searchingstring);
