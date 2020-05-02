@@ -21,19 +21,35 @@ namespace VareDatabase.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllItems()
+        //Get on ID
+        [Route("item/{id}")]
+        public IActionResult GetSpecificItem(int id)
+        { 
+            IEnumerable<ItemEntity> item = _unitOfWork.Edits.GetItem(id);
+        }
+
+        [HttpGet]
+        //Get All
+        public List<ItemEntity> GetAllEntities() { }
+
+        [HttpPost]
+        //Post = Create
+        public ItemEntity CreateEntity(ItemEntity item)
         {
-            List<ItemEntity> items = new List<ItemEntity>();
-            try
-            {
-                items = _unitOfWork.;
-                items = _unitOfWork.Auctions.Read(20);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            //create
+        }
+
+        [HttpPut]
+        //Update eller replace
+        public ItemEntity EditItemEntity(int id, ItemEntity item)
+        {
+            //Ændrer bestemt item
+        }
+
+        [HttpDelete]
+        public ItemEntity deleteItem(int id)
+        {
+            //delete
         }
     }
 }
