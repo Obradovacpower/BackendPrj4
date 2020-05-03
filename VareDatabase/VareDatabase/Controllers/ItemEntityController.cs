@@ -43,6 +43,14 @@ namespace VareDatabase.Controllers
             return json;
         }
 
+        [HttpGet]
+        [Route("Home/item/tag/{search?}")]
+        public ActionResult<string> GetTag(string search)
+        {
+            json = JsonConvert.SerializeObject(_dbLogic.Search(search), Formatting.Indented);
+            return json;
+        }
+
         [HttpPost]
         //Post = Create
         public void CreateEntity(ItemEntity item)
