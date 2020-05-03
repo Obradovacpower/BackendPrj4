@@ -28,8 +28,6 @@ namespace VareDatabase.Controllers
         }
 
         [HttpGet]
-        [Route("Home")]
-        [Route("Home/item")]
         [Route("Home/item/{id?}")]
         //Get on ID
         public ActionResult<string> GetItem(int id)
@@ -38,10 +36,18 @@ namespace VareDatabase.Controllers
             return json;
         }
         [HttpGet]
-        [Route("")]
+        [Route("Home/item")]
         public ActionResult<string> GetAllItems()
         {
             json = JsonConvert.SerializeObject(_dbLogic.GetAll(), Formatting.Indented);
+            return json;
+        }
+
+        [HttpGet]
+        [Route("Home/item/tag/{search?}")]
+        public ActionResult<string> GetTag(string search)
+        {
+            json = JsonConvert.SerializeObject(_dbLogic.Search(search), Formatting.Indented);
             return json;
         }
 
@@ -65,6 +71,7 @@ namespace VareDatabase.Controllers
         public void DeleteItem(ItemEntity item)
         { 
             _dbLogic.Delete(item);
+            _dbLogic.Save();
         }
     }
 }

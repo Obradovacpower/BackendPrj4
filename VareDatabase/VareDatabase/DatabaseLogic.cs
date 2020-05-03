@@ -46,7 +46,7 @@ namespace VareDatabase
         {
             repo.AddTag(id, newTag);
         }
-        public IEnumerable<ItemEntity> Search(string searchingstring, string orderbyname, bool asc)
+        public IEnumerable<ItemEntity> Search(string searchingstring)
         {
             return repo.Search(searchingstring);
         }
