@@ -8,10 +8,9 @@ namespace VareDatabase.Interfaces
 {
     interface ITagRepository : IRepository<TagEntity>
     {
-        void Create(TagEntity entity);
+        void Create(TagEntity tag);
         TagEntity Read(int id);
         IEnumerable<TagEntity> GetAll();
-        IEnumerable<TagEntity> GetAllTagForSpecificTag();
-        void Delete(TagEntity entity);
+        IEnumerable<TagEntity> GetAllTagForSpecificItem(int id);
     }
 }

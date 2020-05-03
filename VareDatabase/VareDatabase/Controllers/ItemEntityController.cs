@@ -12,13 +12,12 @@ using VareDatabase.Repo.Auction;
 
 namespace VareDatabase.Controllers
 {
-    //[Route("api/[controller]")]
     public class ItemEntityController : Controller
     {
         private DatabaseLogic _dbLogic;
         private string json;
 
-        public ItemEntityController(/*DatabaseLogic dbLogic*/)
+        public ItemEntityController()
         {
             var db = new DBContext.VareDataModelContext();
             IItemRepository repo = new ItemRepository(db);
