@@ -45,7 +45,7 @@ namespace VareDatabase.Controllers
 
         [HttpPost]
         //Post = Create
-        public ActionResult CreateEntity(ItemEntity item)
+        public void CreateEntity(ItemEntity item)
         {
             _dbLogic.AddItem(item);
             _dbLogic.Save();
